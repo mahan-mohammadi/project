@@ -1,0 +1,22 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class User{
+    private:
+        int id;
+        string username;
+        string displayname;
+        string encPass;
+    public:
+        User();
+        User(int , string , string , string);
+        void setID(int);
+        void setUsername(string);
+        void setDisplayname(string);
+        void setPassword(string);
+        int getID();
+        string getUsername();
+        string getDName();
+        string getPass();
+};
