@@ -6,7 +6,7 @@ class User{
     private:
         int id;
         string username;
-        string displayname;
+        string displayName;
         string encPass;
     public:
         User();
