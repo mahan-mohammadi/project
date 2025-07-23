@@ -27,6 +27,7 @@ void User::setDisplayname(std::string displayname) {
     this->displayName = displayname;
 }
 
+//need to add encdec
 void User::setPassword(std::string encPass) {
     this->encPass = encPass;
 }
@@ -43,6 +44,7 @@ std::string User::getDName() {
     return this->displayName;
 }
 
+//need to add encdenc
 std::string User::getPass() {
     return this->encPass;
 }
