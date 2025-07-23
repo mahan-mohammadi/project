@@ -5,7 +5,7 @@
 ### 👤 User Class
 - [x] Define the data structure for a single user (`user.h`)
 - [x] Implement the methods in `user.cpp`
-- [ ] ♻️ Reformat constructors to use **member initializer lists** for better C++ practices
+- [x] ♻️ Reformat constructors to use **member initializer lists** for better C++ practices
 
 ### 📋 UserManager Class
 - [ ] Implement `UserManager.h` with method declarations (`registerUser`, `userExists`)

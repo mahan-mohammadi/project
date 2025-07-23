@@ -5,15 +5,13 @@ User::User() : id(-1), username(""), displayName(""), encPass("") {
     
 }
 
-/// reformat this
-User::User(int id, std::string username, std::string displayname, std::string encPass) :
-    id(id),
-    username(username),
-    displayName(displayname),
-    encPass(encPass)
-{
-
+User::User(int id, std::string username, std::string displayname, std::string encPass) {
+    this->id = id;
+    this->username = username;
+    this->displayName = displayname;
+    this->encPass = encPass;
 }
+
 
 void User::setID(int id) {
     this->id = id;
@@ -27,7 +25,7 @@ void User::setDisplayname(std::string displayname) {
     this->displayName = displayname;
 }
 
-//need to add encdec
+//need to add
 void User::setPassword(std::string encPass) {
     this->encPass = encPass;
 }
