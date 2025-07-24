@@ -7,6 +7,7 @@ using namespace std;
 class UserDB{
     private:
         string fileName;
+        User userList[];
     public:
         UserDB();
         UserDB(string);
