@@ -13,8 +13,8 @@
 - [x] Implement `UserManager.cpp` with file I/O logic to read/write `users.txt`
 
 ### 🔐 Custom Encryption
-- [ ] Create `Encryptor` class (`Encryptor.h`, `Encryptor.cpp`)
-- [ ] Add encryption/decryption methods (e.g., simple XOR cipher)
+- [x] Create `Encryptor` class (`Encryptor.h`, `Encryptor.cpp`)
+- [x] Add encryption/decryption methods (e.g., simple XOR cipher)
 - [ ] Integrate `Encryptor` into `UserManager` to encrypt passwords before saving
 - [ ] Add them to the user class
 
