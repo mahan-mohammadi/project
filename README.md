@@ -8,8 +8,9 @@
 - [x] ♻️ Reformat constructors to use **member initializer lists** for better C++ practices
 
 ### 📋 UserManager Class
-- [ ] Implement `UserManager.h` with method declarations (`registerUser`, `userExists`)
-- [ ] Implement `UserManager.cpp` with file I/O logic to read/write `users.txt`
+- [ ] make a way so that you can get a new id for new users
+- [x] Implement `UserManager.h` with method declarations (`registerUser`, `userExists`)
+- [x] Implement `UserManager.cpp` with file I/O logic to read/write `users.txt`
 
 ### 🔐 Custom Encryption
 - [ ] Create `Encryptor` class (`Encryptor.h`, `Encryptor.cpp`)

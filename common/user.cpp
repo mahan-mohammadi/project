@@ -34,15 +34,21 @@ int User::getID() {
     return this->id;
 }
 
-std::string User::getUsername() {
+string User::getUsername() {
     return this->username;
 }
 
-std::string User::getDName() {
+string User::getDName() {
     return this->displayName;
 }
 
 //need to add encdenc
-std::string User::getPass() {
+string User::getPass() {
     return this->encPass;
 }
+
+void User::print(){
+    cout << "id: " << id << " display name: " << displayName << " username: " << username << '\n';
+}
+
+

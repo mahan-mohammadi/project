@@ -19,4 +19,5 @@ class User{
         string getUsername();
         string getDName();
         string getPass();
+        void print();
 };

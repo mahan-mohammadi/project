@@ -13,7 +13,6 @@ UserDB::UserDB(string filename){
 void UserDB::load() {
     ifstream DBFile(this->fileName);
     string line;
-    int i = 0;
 
     while (getline(DBFile, line)) {
         stringstream ss(line);
@@ -25,8 +24,35 @@ void UserDB::load() {
             getline(ss, encpass)) {
             
             int id = std::stoi(idStr); // convert string to int
-            userList[i] = User(id, username, display, encpass);
-            i++;
+            userList[userCount++] = User(id, username, display, encpass);
         }
+    }
+}
+
+void UserDB::save(){
+    ofstream DBfile(this->fileName);
+    for (int i=0 ; i < userCount ; i++){
+        DBfile << userList[i].getID() << ',' 
+        << userList[i].getUsername() << ',' 
+        << userList[i].getDName() << ','
+         << userList[i].getPass() << '\n';
+    }
+}
+
+void UserDB::add(User user){
+    userList[userCount++] = user;
+    save();
+}
+
+void UserDB::printUserData(int id){
+    bool found = false;
+    for(int i=0 ; i < userCount ; i++){
+        if(userList[i].getID() == id){
+            userList[i].print();
+            found = true;
+        }
+    }
+    if (!found){
+        cout << "not found";
     }
 }
