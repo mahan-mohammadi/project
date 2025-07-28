@@ -59,6 +59,6 @@ void UserDB::printUserData(int id){
 
 
 int UserDB::getNewID(){
-    //usercount is already last index + 1
-    return userList[userCount].getID();
+
+    return userList[userCount-1].getID()+1;
 }
