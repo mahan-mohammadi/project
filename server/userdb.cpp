@@ -56,3 +56,9 @@ void UserDB::printUserData(int id){
         cout << "not found";
     }
 }
+
+
+int UserDB::getNewID(){
+    //usercount is already last index + 1
+    return userList[userCount].getID();
+}

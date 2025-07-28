@@ -15,5 +15,6 @@ class UserDB{
         void load();
         void save();
         void add(User);
-        void printUserData(int);   
+        void printUserData(int);
+        int getNewID();
 };
