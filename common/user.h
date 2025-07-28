@@ -9,7 +9,6 @@ class User{
         string displayName;
         string encPass;
     public:
-        User();
         User(int , string , string , string);
         void setID(int);
         void setUsername(string);

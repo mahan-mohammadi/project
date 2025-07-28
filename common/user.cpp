@@ -1,10 +1,5 @@
 #include "user.h"
 
-// refotmat this
-User::User() : id(-1), username(""), displayName(""), encPass("") {
-    
-}
-
 User::User(int id, std::string username, std::string displayname, std::string encPass) {
     this->id = id;
     this->username = username;
