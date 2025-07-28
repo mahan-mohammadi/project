@@ -1,5 +1,4 @@
 #include "user.h"
-
 // refotmat this
 User::User() : id(-1), username(""), displayName(""), encPass("") {
     
