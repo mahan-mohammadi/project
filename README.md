@@ -19,7 +19,7 @@
 - ~~[ ] Add them to the user class~~
 
 ### 🌐 Integrate into Server
-- [ ] Add a `UserManager` member to the `Server` class
+- [x] Add a `UserManager` member to the `Server` class
 - [ ] Implement `REGISTER` command in `Server::run()` using `userManager.registerUser()`
 
 ---
