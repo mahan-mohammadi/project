@@ -35,6 +35,7 @@ Server::Server(int port) {
     }
 
     std::cout << "Server setup complete. Listening on port " << this->port << std::endl;
+    userdb.load();
 }
 
 void Server::run() {

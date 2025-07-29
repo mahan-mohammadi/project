@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+#include "userdb.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ class Server{
     void run();
     ~Server();
   private:
+    UserDB userdb;
     int port;
     int listener_fd;
     fd_set master_fds;
