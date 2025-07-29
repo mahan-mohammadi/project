@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sstream>
 
 Server::Server(int port) {
     this->port = port;
@@ -36,6 +37,8 @@ Server::Server(int port) {
 
     std::cout << "Server setup complete. Listening on port " << this->port << std::endl;
     userdb.load();
+
+    setUpCommandMap();
 }
 
 void Server::run() {
@@ -97,4 +100,16 @@ void Server::setPort(int port){
 
 int Server::getPort(){
   return this->port;
+}
+
+void Server::setUpCommandMap(){
+    commandMap["REGISTER"] = [this](int client_fd , stringstream &ss){
+        this->handleRegister(client_fd , ss);
+    };
+}
+
+void Server::handleRegister(int client_fd , stringstream &ss){
+    string username , encpassword , display;
+    ss >> username >> display >> encpassword;
+          
 }
