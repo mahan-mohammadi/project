@@ -62,3 +62,14 @@ int UserDB::getNewID(){
 
     return userList[userCount-1].getID()+1;
 }
+
+
+bool UserDB::userNameAlreadyExist(string username){
+    for (int i = 0; i < userCount; i++)
+    {
+        if(userList[i].getUsername() == username){
+            return true;
+        }
+    }
+    return false;
+}

@@ -17,4 +17,5 @@ class UserDB{
         void add(User);
         void printUserData(int);
         int getNewID();
+        bool userNameAlreadyExist(string);
 };
