@@ -111,5 +111,13 @@ void Server::setUpCommandMap(){
 void Server::handleRegister(int client_fd , stringstream &ss){
     string username , encpassword , display;
     ss >> username >> display >> encpassword;
-          
+    if(userdb.userNameAlreadyExist(username)){
+        send(client_fd, "ERROR Username is already taken.\n", 33, 0);
+    }
+    else{
+        int id = userdb.getNewID();
+        User newUser(id, username, display, encpassword);
+        userdb.add(newUser);
+        send(client_fd , "SUCC" , 5 , 0);
+    }
 }
