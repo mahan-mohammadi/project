@@ -1,6 +1,6 @@
 # 🧩 Project Phases & TODOs
 
-## ✅ Phase 1: Core User Management (🔨 Current Focus)
+## ✅ Phase 1: Core User Management
 
 ### 👤 User Class
 - [x] Define the data structure for a single user (`user.h`)
@@ -24,7 +24,7 @@
 
 ---
 
-## 🖥️ Phase 2: Client Application & Login
+## 🖥️ Phase 2: Client Application & Login (🔨 Current Focus)
 
 ### 🧑‍💻 Client Class
 - [ ] Implement `client.h` and `client.cpp`
