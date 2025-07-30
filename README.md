@@ -20,7 +20,7 @@
 
 ### 🌐 Integrate into Server
 - [x] Add a `UserManager` member to the `Server` class
-- [ ] Implement `REGISTER` command in `Server::run()` using `userManager.registerUser()`
+- [x] Implement `REGISTER` command in `Server::run()` using `userManager.registerUser()`
 
 ---
 
