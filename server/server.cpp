@@ -85,8 +85,17 @@ void Server::run() {
                         close(i); // Close the socket
                         FD_CLR(i, &this->master_fds); // Remove from master set
                     } else {
-                        // We got some data
-                        std::cout << "Message from client " << i << ": " << buffer << std::endl;
+                        // the buffer is 1kb so it has a lot of garbage daa
+                        stringstream ss(string(buffer , bytes_received));
+                        string command;
+                        ss >> command;
+                        auto f = commandMap.find(command);
+                        if(f != commandMap.end()){
+                            f->second(i ,ss);
+                        }
+                        else{
+                            send(i, "ERROR Unknown command\n" , 22, 0);
+                        }
                     }
                 }
             }
