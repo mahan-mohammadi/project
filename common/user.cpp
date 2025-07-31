@@ -1,7 +1,10 @@
 #include "user.h"
-// refotmat this
-User::User() : id(-1), username(""), displayName(""), encPass("") {
-    
+
+User::User(){
+    id = -1;
+    username = "";
+    displayName = "";
+    encPass = "";    
 }
 
 User::User(int id, std::string username, std::string displayname, std::string encPass) {
@@ -24,7 +27,7 @@ void User::setDisplayname(std::string displayname) {
     this->displayName = displayname;
 }
 
-//need to add
+
 void User::setPassword(std::string encPass) {
     this->encPass = encPass;
 }
@@ -41,7 +44,7 @@ string User::getDName() {
     return this->displayName;
 }
 
-//need to add encdenc
+
 string User::getPass() {
     return this->encPass;
 }
