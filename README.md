@@ -34,7 +34,7 @@
   - Thread 2: Receive server messages
 
 ### 🔑 LOGIN Command
-- [ ] Add login logic to `UserManager` (verify username and password)
+- [x] Add login logic to `UserManager` (verify username and password)
 - [ ] Add `LOGIN` command to server using `UserManager`
 - [ ] Use `std::map<int, UserInfo> clients` in `Server` to track logged-in users
 
