@@ -100,6 +100,7 @@ void Server::run() {
                         ss >> command;
                         auto f = commandMap.find(command);
                         if(f != commandMap.end()){
+                            //first is the key second is the value
                             f->second(i ,ss);
                         }
                         else{

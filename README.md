@@ -24,7 +24,7 @@
 
 ---
 
-## 🖥️ Phase 2: Client Application & Login (🔨 Current Focus)
+## 🖥️ Phase 2: Client Application & Login
 
 ### 🧑‍💻 Client Class
 - [x] Implement `client.h` and `client.cpp`
@@ -40,16 +40,16 @@
 
 ---
 
-## 💬 Phase 3: Private Messaging & File Storage
-
+## 💬 Phase 3: Private Messaging & File Storage (🔨 Current Focus)
 ### 📩 SEND Command
+- [ ] implement message logic
 - [ ] Client sends: `SEND <recipient_username> <message>`
-- [ ] Server parses the command
-- [ ] Server saves message to `<recipient_username>.txt`
+- [ ] Server parses the command and add ui to the apps
+- [ ] Server saves message to `<id>-<id>.txt`
 
 ### 📥 CHECK_MESSAGES Command
-- [ ] Client sends `CHECK_MESSAGES`
-- [ ] Server reads `<username>.txt`
+- [ ] Client sends `HISTORY`
+- [ ] Server reads `<id>-<id>.txt`
 - [ ] Server sends file contents back to the client
 
 ---
