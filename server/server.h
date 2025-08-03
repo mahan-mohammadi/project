@@ -28,4 +28,5 @@ class Server{
     int fd_max;
     map<int , UserInfo> clients;
     void handleRegister(int , stringstream&);
+    void handleLogin(int, stringstream&);
 };

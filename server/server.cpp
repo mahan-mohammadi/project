@@ -124,6 +124,9 @@ void Server::setUpCommandMap(){
     commandMap["REGISTER"] = [this](int client_fd , stringstream &ss){
         this->handleRegister(client_fd , ss);
     };
+    commandMap["LOGIN"] = [this](int client_fd , stringstream &ss){
+        this->handleLogin(client_fd,ss);
+    };
 }
 
 void Server::handleRegister(int client_fd , stringstream &ss){
@@ -137,5 +140,22 @@ void Server::handleRegister(int client_fd , stringstream &ss){
         User newUser(id, username, display, encpassword);
         userdb.add(newUser);
         send(client_fd , "SUCC" , 5 , 0);
+    }
+}
+
+void Server::handleLogin(int client_fd, stringstream& ss){
+    string username , encpass;
+    ss >> username >> encpass;
+    User* user = userdb.findUserByUsername(username);
+    if(user == nullptr){
+        if(user->getPass() == encpass){
+            clients[client_fd].isLogedIn = true;
+            clients[client_fd].id = user->getID();
+            send(client_fd, "SUCC\n", 5, 0);
+        } else {
+        send(client_fd, "ERROR Invalid credentials\n", 26, 0);
+        }
+    } else {
+        send(client_fd, "ERROR User not found\n", 21, 0);
     }
 }
