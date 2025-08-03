@@ -27,7 +27,7 @@
 ## 🖥️ Phase 2: Client Application & Login (🔨 Current Focus)
 
 ### 🧑‍💻 Client Class
-- [ ] Implement `client.h` and `client.cpp`
+- [x] Implement `client.h` and `client.cpp`
 - [ ] Write logic to connect to the server
 - [ ] Use a **two-threaded model**:
   - Thread 1: Send user input
