@@ -18,7 +18,7 @@ int main() {
     //temp
     string username = "testuser";
     string password = "TestPass";
-    string loginCommand = "LOGIN " + username + " " + password;
+    string loginCommand = "REGISTER " + username + " " + password;
 
     cout << "Attempting to log in as '" << username << "'..." << endl;
     

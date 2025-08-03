@@ -41,6 +41,15 @@ Server::Server(int port) {
     setUpCommandMap();
 }
 
+Server::~Server() {
+
+    if (listener_fd != -1) {
+        close(listener_fd);
+    }
+    std::cout << "Server shut down." << std::endl;
+}
+
+
 void Server::run() {
     // Clean and set up the master file descriptor set
     FD_ZERO(&this->master_fds);
