@@ -28,10 +28,10 @@
 
 ### 🧑‍💻 Client Class
 - [x] Implement `client.h` and `client.cpp`
-- [ ] Write logic to connect to the server
-- [ ] Use a **two-threaded model**:
-  - Thread 1: Send user input
-  - Thread 2: Receive server messages
+- [x] Write logic to connect to the server
+- [ ] ~~Use a **two-threaded model**:~~
+  - ~~Thread 1: Send user input~~
+  - ~~Thread 2: Receive server messages~~
 
 ### 🔑 LOGIN Command
 - [x] Add login logic to `UserManager` (verify username and password)
