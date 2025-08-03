@@ -73,3 +73,12 @@ bool UserDB::userNameAlreadyExist(string username){
     }
     return false;
 }
+
+User* UserDB::findUserByUsername(string username) {
+    for (int i = 0; i < userCount; i++) {
+        if (userList[i].getUsername() == username) {
+            return &userList[i];
+        }
+    }
+    return nullptr;
+}
