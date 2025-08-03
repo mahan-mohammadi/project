@@ -1,4 +1,9 @@
 #include "userutils.h"
+
+
+
+//rewrite so password and username are also alphanum only
+
 bool UserUtils::isPassValid(string password){
     bool isValidSize = false;
     bool hasNum = false;
