@@ -35,8 +35,8 @@
 
 ### 🔑 LOGIN Command
 - [x] Add login logic to `UserManager` (verify username and password)
-- [ ] Add `LOGIN` command to server using `UserManager`
-- [ ] Use `std::map<int, UserInfo> clients` in `Server` to track logged-in users
+- [x] Add `LOGIN` command to server using `UserManager`
+- [x] Use `std::map<int, UserInfo> clients` in `Server` to track logged-in users
 
 ---
 
