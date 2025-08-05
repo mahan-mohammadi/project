@@ -148,7 +148,7 @@ void Server::handleLogin(int client_fd, stringstream& ss){
     string username , encpass;
     ss >> username >> encpass;
     User* user = userdb.findUserByUsername(username);
-    if(user == nullptr){
+    if(user != nullptr){
         if(user->getPass() == encpass){
             clients[client_fd].isLogedIn = true;
             clients[client_fd].id = user->getID();
