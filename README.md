@@ -42,10 +42,10 @@
 
 ## 💬 Phase 3: Private Messaging & File Storage (🔨 Current Focus)
 ### 📩 SEND Command
-- [ ] implement message logic
+- [x] implement message logic
 - [ ] Client sends: `SEND <recipient_username> <message>`
 - [ ] Server parses the command and add ui to the apps
-- [ ] Server saves message to `<id>-<id>.txt`
+- [x] Server saves message to `<id>-<id>.txt`
 
 ### 📥 CHECK_MESSAGES Command
 - [ ] Client sends `HISTORY`
