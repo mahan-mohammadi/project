@@ -1,10 +1,10 @@
 #include "user.h"
 
-User::User() {
+User::User(){
     id = -1;
     username = "";
     displayName = "";
-    encPass = "";
+    encPass = "";    
 }
 
 User::User(int id, std::string username, std::string displayname, std::string encPass) {
@@ -49,7 +49,7 @@ string User::getPass() {
     return this->encPass;
 }
 
-void User::print() {
+void User::print(){
     cout << "id: " << id << " display name: " << displayName << " username: " << username << '\n';
 }
 

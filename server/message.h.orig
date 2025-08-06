@@ -3,8 +3,8 @@
 
 using namespace std;
 
-class Message {
-public:
+class Message{
+    public:
     //TODO: add a json constructor and a to json?????
     Message();
     Message(int senderId, int reciverId, string content);
@@ -14,7 +14,7 @@ public:
     int getReciverId();
     string getMessage();
     time_t getTime();
-private:
+    private:
     int senderId;
     int reciverId;
     string content;

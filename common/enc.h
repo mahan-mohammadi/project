@@ -2,10 +2,10 @@
 
 using namespace std;
 
-class Encryption{
-    private:
-        string encPass;
-    public:
-        Encryption(string);
-        string getEncText();
+class Encryption {
+private:
+    string encPass;
+public:
+    Encryption(string);
+    string getEncText();
 };

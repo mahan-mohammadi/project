@@ -54,7 +54,7 @@ void Server::run() {
     // Clean and set up the master file descriptor set
     FD_ZERO(&this->master_fds);
     FD_SET(this->listener_fd, &this->master_fds);
-
+    
     // Keep track of the highest file descriptor
     this->fd_max = this->listener_fd;
 
@@ -72,7 +72,7 @@ void Server::run() {
         // Loop through all possible file descriptors
         for (int i = 0; i <= this->fd_max; i++) {
             if (FD_ISSET(i, &read_fds)) { // Check for activity on socket 'i'
-
+                
                 if (i == this->listener_fd) {
                     // --- Case 1: New connection on the listener socket ---
                     int new_client_fd = accept(this->listener_fd, nullptr, nullptr);
@@ -95,16 +95,16 @@ void Server::run() {
                         FD_CLR(i, &this->master_fds); // Remove from master set
                     } else {
                         // the buffer is 1kb so it has a lot of garbage daa
-                        stringstream ss(string(buffer, bytes_received));
+                        stringstream ss(string(buffer , bytes_received));
                         string command;
                         ss >> command;
                         auto f = commandMap.find(command);
-                        if(f != commandMap.end()) {
+                        if(f != commandMap.end()){
                             //first is the key second is the value
-                            f->second(i,ss);
+                            f->second(i ,ss);
                         }
-                        else {
-                            send(i, "ERROR Unknown command\n", 22, 0);
+                        else{
+                            send(i, "ERROR Unknown command\n" , 22, 0);
                         }
                     }
                 }
@@ -113,48 +113,48 @@ void Server::run() {
     }
 }
 
-void Server::setPort(int port) {
-    this->port = port;
+void Server::setPort(int port){
+  this->port = port;
 }
 
-int Server::getPort() {
-    return this->port;
+int Server::getPort(){
+  return this->port;
 }
 
-void Server::setUpCommandMap() {
-    commandMap["REGISTER"] = [this](int client_fd, stringstream &ss) {
-        this->handleRegister(client_fd, ss);
+void Server::setUpCommandMap(){
+    commandMap["REGISTER"] = [this](int client_fd , stringstream &ss){
+        this->handleRegister(client_fd , ss);
     };
-    commandMap["LOGIN"] = [this](int client_fd, stringstream &ss) {
+    commandMap["LOGIN"] = [this](int client_fd , stringstream &ss){
         this->handleLogin(client_fd,ss);
     };
 }
 
-void Server::handleRegister(int client_fd, stringstream &ss) {
-    string username, encpassword, display;
+void Server::handleRegister(int client_fd , stringstream &ss){
+    string username , encpassword , display;
     ss >> username >> display >> encpassword;
-    if(userdb.userNameAlreadyExist(username)) {
+    if(userdb.userNameAlreadyExist(username)){
         send(client_fd, "ERROR Username is already taken.\n", 33, 0);
     }
-    else {
+    else{
         int id = userdb.getNewID();
         User newUser(id, username, display, encpassword);
         userdb.add(newUser);
-        send(client_fd, "SUCC", 5, 0);
+        send(client_fd , "SUCC" , 5 , 0);
     }
 }
 
-void Server::handleLogin(int client_fd, stringstream& ss) {
-    string username, encpass;
+void Server::handleLogin(int client_fd, stringstream& ss){
+    string username , encpass;
     ss >> username >> encpass;
     User* user = userdb.findUserByUsername(username);
-    if(user != nullptr) {
-        if(user->getPass() == encpass) {
+    if(user != nullptr){
+        if(user->getPass() == encpass){
             clients[client_fd].isLogedIn = true;
             clients[client_fd].id = user->getID();
             send(client_fd, "SUCC\n", 5, 0);
         } else {
-            send(client_fd, "ERROR Invalid credentials\n", 26, 0);
+        send(client_fd, "ERROR Invalid credentials\n", 26, 0);
         }
     } else {
         send(client_fd, "ERROR User not found\n", 21, 0);

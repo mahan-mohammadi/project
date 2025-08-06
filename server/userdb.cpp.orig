@@ -2,11 +2,11 @@
 #include <fstream>
 #include <sstream>
 
-UserDB::UserDB() {
+UserDB::UserDB(){
     this->fileName = "userdb.csv";
 }
 
-UserDB::UserDB(string filename) {
+UserDB::UserDB(string filename){
     this->fileName = filename;
 }
 
@@ -19,55 +19,55 @@ void UserDB::load() {
         string idStr, username, display, encpass;
 
         if (getline(ss, idStr, ',') &&
-                getline(ss, username, ',') &&
-                getline(ss, display, ',') &&
-                getline(ss, encpass)) {
-
+            getline(ss, username, ',') &&
+            getline(ss, display, ',') &&
+            getline(ss, encpass)) {
+            
             int id = std::stoi(idStr); // convert string to int
             userList[userCount++] = User(id, username, display, encpass);
         }
     }
 }
 
-void UserDB::save() {
+void UserDB::save(){
     ofstream DBfile(this->fileName);
-    for (int i=0 ; i < userCount ; i++) {
-        DBfile << userList[i].getID() << ','
-               << userList[i].getUsername() << ','
-               << userList[i].getDName() << ','
-               << userList[i].getPass() << '\n';
+    for (int i=0 ; i < userCount ; i++){
+        DBfile << userList[i].getID() << ',' 
+        << userList[i].getUsername() << ',' 
+        << userList[i].getDName() << ','
+         << userList[i].getPass() << '\n';
     }
 }
 
-void UserDB::add(User user) {
+void UserDB::add(User user){
     userList[userCount++] = user;
     save();
 }
 
-void UserDB::printUserData(int id) {
+void UserDB::printUserData(int id){
     bool found = false;
-    for(int i=0 ; i < userCount ; i++) {
-        if(userList[i].getID() == id) {
+    for(int i=0 ; i < userCount ; i++){
+        if(userList[i].getID() == id){
             userList[i].print();
             found = true;
         }
     }
-    if (!found) {
+    if (!found){
         cout << "not found";
     }
 }
 
 
-int UserDB::getNewID() {
+int UserDB::getNewID(){
 
     return userList[userCount-1].getID()+1;
 }
 
 
-bool UserDB::userNameAlreadyExist(string username) {
+bool UserDB::userNameAlreadyExist(string username){
     for (int i = 0; i < userCount; i++)
     {
-        if(userList[i].getUsername() == username) {
+        if(userList[i].getUsername() == username){
             return true;
         }
     }

@@ -4,29 +4,29 @@
 #include <functional>
 
 using namespace std;
-using CommandHandler = function<void(int, stringstream&)>;
+using CommandHandler = function<void(int , stringstream&)>;
 
-struct UserInfo {
-    int id;
-    bool isLogedIn = false;
+struct UserInfo{
+  int id;
+  bool isLogedIn = false;
 };
 
-class Server {
-public:
+class Server{
+  public:
     Server(int);
     void setPort(int);
     int getPort();
     void run();
     ~Server();
-private:
+  private:
     void setUpCommandMap();
-    map<string, CommandHandler> commandMap;
+    map<string , CommandHandler> commandMap;
     UserDB userdb;
     int port;
     int listener_fd;
     fd_set master_fds;
     int fd_max;
-    map<int, UserInfo> clients;
-    void handleRegister(int, stringstream&);
+    map<int , UserInfo> clients;
+    void handleRegister(int , stringstream&);
     void handleLogin(int, stringstream&);
 };

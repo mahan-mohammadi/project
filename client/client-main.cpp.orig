@@ -12,7 +12,7 @@ int main() {
         cerr << "Failed to connect to the server." << endl;
         return 1;
     }
-
+    
     cout << "Connected to the server." << endl;
 
     //temp
@@ -21,7 +21,7 @@ int main() {
     string loginCommand = "REGISTER " + username + " " + password;
 
     cout << "Attempting to log in as '" << username << "'..." << endl;
-
+    
 
     client.sendMessage(loginCommand);
 

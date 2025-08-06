@@ -2,8 +2,8 @@
 
 using namespace std;
 
-class UserUtils{
-    public:
-        static bool isPassValid(string);
-        static bool isUsernameValid(string);
+class UserUtils {
+public:
+    static bool isPassValid(string);
+    static bool isUsernameValid(string);
 };
