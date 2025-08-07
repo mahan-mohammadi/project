@@ -44,7 +44,7 @@
 ### 📩 SEND Command
 - [x] implement message logic
 - [x] Client sends: `SEND <recipient_username> <message>`
-- [ ] Server parses the command and add ui to the apps
+- [ ] Server parses the command
 - [x] Server saves message to `<id>-<id>.txt`
 
 ### 📥 CHECK_MESSAGES Command
@@ -54,12 +54,10 @@
 
 ---
 
-## 📁 Phase 4: File Transfer & Reporting
+## 📁 Phase 4: UI & Reporting
 
-### 📤 File Transfer
-- [ ] Define protocol: `SENDFILE <recipient> <filename>`
-- [ ] Client sends file in chunks to server
-- [ ] Server forwards file in chunks to recipient client
+### 🎨 the ui
+- [ ] and add ui to the apps
 
 ### 📊 Reporting System
 - [ ] Add static counters in `Server` to track:
