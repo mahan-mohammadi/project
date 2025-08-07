@@ -1,5 +1,5 @@
 #include "server.h"
-
+#include "messagedb.h"
 #include <iostream>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -159,4 +159,28 @@ void Server::handleLogin(int client_fd, stringstream& ss) {
     } else {
         send(client_fd, "ERROR User not found\n", 21, 0);
     }
+}
+
+
+void Server::handleSend(int client_fd, stringstream& ss) {
+    if (!clients[client_fd].isLogedIn) {
+        send(client_fd, "ERROR Not logged in\n", 20, 0);
+        return;
+    }
+
+    string recipientUsername;
+    ss >> recipientUsername;
+
+    User* recipient = userdb.findUserByUsername(recipientUsername);
+    if (recipient == nullptr) {
+        send(client_fd, "ERROR User not found\n", 21, 0);
+        return;
+    }
+
+    string message;
+    getline(ss, message);
+
+
+    MessageDB::saveMessage(Message(clients[client_fd].id, recipient->getID(), message));
+    send(client_fd, "SUCC\n", 5, 0);
 }
