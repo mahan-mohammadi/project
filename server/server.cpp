@@ -128,6 +128,9 @@ void Server::setUpCommandMap() {
     commandMap["LOGIN"] = [this](int client_fd, stringstream &ss) {
         this->handleLogin(client_fd,ss);
     };
+    commandMap["SEND"] = [this](int client_fd , stringstream &ss){
+        this->handleSend(client_fd,ss);
+    };
 }
 
 void Server::handleRegister(int client_fd, stringstream &ss) {
@@ -168,10 +171,10 @@ void Server::handleSend(int client_fd, stringstream& ss) {
         return;
     }
 
-    string recipientUsername;
-    ss >> recipientUsername;
+    string reciverUser;
+    ss >> reciverUser;
 
-    User* recipient = userdb.findUserByUsername(recipientUsername);
+    User* recipient = userdb.findUserByUsername(reciverUser);
     if (recipient == nullptr) {
         send(client_fd, "ERROR User not found\n", 21, 0);
         return;
