@@ -44,13 +44,13 @@
 ### 📩 SEND Command
 - [x] implement message logic
 - [x] Client sends: `SEND <recipient_username> <message>`
-- [ ] Server parses the command
+- [x] Server parses the command
 - [x] Server saves message to `<id>-<id>.txt`
 
 ### 📥 CHECK_MESSAGES Command
-- [ ] Client sends `HISTORY`
-- [ ] Server reads `<id>-<id>.txt`
-- [ ] Server sends file contents back to the client
+- [x] Client sends `HISTORY`
+- [x] Server reads `<id>-<id>.txt`
+- [x] Server sends file contents back to the client
 
 ---
 

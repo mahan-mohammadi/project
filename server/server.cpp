@@ -131,6 +131,9 @@ void Server::setUpCommandMap() {
     commandMap["SEND"] = [this](int client_fd , stringstream &ss){
         this->handleSend(client_fd,ss);
     };
+    commandMap["HISTORY"] = [this](int client_fd , stringstream &ss){
+        this->handleHistory(client_fd , ss);
+    };
 }
 
 void Server::handleRegister(int client_fd, stringstream &ss) {
@@ -171,11 +174,11 @@ void Server::handleSend(int client_fd, stringstream& ss) {
         return;
     }
 
-    string reciverUser;
-    ss >> reciverUser;
+    string contact;
+    ss >> contact;
 
-    User* recipient = userdb.findUserByUsername(reciverUser);
-    if (recipient == nullptr) {
+    User* reciver = userdb.findUserByUsername(contact);
+    if (reciver == nullptr) {
         send(client_fd, "ERROR User not found\n", 21, 0);
         return;
     }
@@ -184,6 +187,27 @@ void Server::handleSend(int client_fd, stringstream& ss) {
     getline(ss, message);
 
 
-    MessageDB::saveMessage(Message(clients[client_fd].id, recipient->getID(), message));
+    MessageDB::saveMessage(Message(clients[client_fd].id, reciver->getID(), message));
     send(client_fd, "SUCC\n", 5, 0);
+}
+
+void Server::handleHistory(int client_fd, stringstream& ss) {
+    if (!clients[client_fd].isLogedIn) {
+        send(client_fd, "ERROR Not logged in\n", 20, 0);
+        return;
+    }
+
+    string contact;
+    ss >> contact;
+
+    User* reciver = userdb.findUserByUsername(contact);
+    if (reciver == nullptr) {
+        send(client_fd, "ERROR User not found\n", 21, 0);
+        return;
+    }
+
+    json history = MessageDB::getMessagesOf(clients[client_fd].id, reciver->getID());
+    string historyStr = history.dump();
+
+    send(client_fd, historyStr.c_str(), historyStr.length(), 0);
 }
