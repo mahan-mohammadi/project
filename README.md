@@ -54,11 +54,14 @@
 
 ---
 
-## 📁 Phase 4: UI & Reporting
+## 📁 Phase 4: client & Reporting
 
-### 🎨 the ui
-- [ ] and add ui to the apps
-
+### 🎨 the client
+- [ ] add the serialization logic to the client
+- [ ] and add tui to the apps
+- [ ] make a protocol so you can get your contacts from the server `CONTACTs`
+- [ ] add the contacts command logic
+ 
 ### 📊 Reporting System
 - [ ] Add static counters in `Server` to track:
   - Number of users
