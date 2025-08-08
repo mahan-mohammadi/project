@@ -40,7 +40,7 @@
 
 ---
 
-## 💬 Phase 3: Private Messaging & File Storage (🔨 Current Focus)
+## 💬 Phase 3: Private Messaging & File Storage
 ### 📩 SEND Command
 - [x] implement message logic
 - [x] Client sends: `SEND <recipient_username> <message>`
@@ -54,7 +54,7 @@
 
 ---
 
-## 📁 Phase 4: client & Reporting
+## 📁 Phase 4: client & Reporting (🔨 Current Focus)
 
 ### 🎨 the client
 - [ ] add the serialization logic to the client
