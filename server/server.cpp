@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <sstream>
+#include <fstream>
 
 Server::Server(int port) {
     this->port = port;
@@ -12,8 +13,7 @@ Server::Server(int port) {
     // --- Create the socket ---
     this->listener_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->listener_fd == -1) {
-        perror("socket"); // Print the system error message
-        // In a real app, you would throw an exception here
+        perror("socket"); 
         return;
     }
 
@@ -134,6 +134,9 @@ void Server::setUpCommandMap() {
     commandMap["HISTORY"] = [this](int client_fd , stringstream &ss){
         this->handleHistory(client_fd , ss);
     };
+    commandMap["CONTACTS"] = [this](int client_fd, stringstream &ss){
+        this->handleContacts(client_fd, ss);
+    };
 }
 
 void Server::handleRegister(int client_fd, stringstream &ss) {
@@ -210,4 +213,30 @@ void Server::handleHistory(int client_fd, stringstream& ss) {
     string historyStr = history.dump();
 
     send(client_fd, historyStr.c_str(), historyStr.length(), 0);
+}
+
+void Server::handleContacts(int client_fd , stringstream& ss){
+    if (!clients[client_fd].isLogedIn) {
+        send(client_fd, "ERROR Not logged in\n", 20, 0);
+        return;
+    }
+
+    int userId = clients[client_fd].id;
+    ifstream contactsFile("contacts.json");
+    
+    json allContacts;
+    contactsFile >> allContacts;
+
+    string userIdStr = to_string(userId); //all json keys are strings it cant be int
+
+    //end points to the position just after the array in json
+    if (allContacts.find(userIdStr) != allContacts.end()) {
+        json userContacts = allContacts[userIdStr];
+        string responseStr = userContacts.dump();
+
+        //return a c style string not std::string
+        send(client_fd, responseStr.c_str(), responseStr.length(), 0);
+    } else {
+        send(client_fd, "[]", 2, 0);
+    }
 }
