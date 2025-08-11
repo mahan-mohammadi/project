@@ -1,9 +1,5 @@
 #include "userutils.h"
 
-
-
-//rewrite so password and username are also alphanum only
-
 bool UserUtils::isPassValid(string password) {
     bool isValidSize = false;
     bool hasNum = false;
@@ -12,26 +8,25 @@ bool UserUtils::isPassValid(string password) {
     if(password.size() >= 8 && password.size() <= 20) {
         isValidSize = true;
     }
-    for(char c : password) {
-        if(isalpha(c)) {
+    for (char c : password) {
+        if (!isalnum(c))
+            return false;
+        if (isalpha(c))
             hasAlpha = true;
-            break;
-        }
-    }
-    for(char c : password) {
-        if(isdigit(c)) {
+        if (isdigit(static_cast<unsigned char>(c)))
             hasNum = true;
-            break;
-        }
     }
+
     return isValidSize && hasNum && hasAlpha;
 }
 
 bool UserUtils::isUsernameValid(string username) {
-    if(username.size() >= 4 && username.size() <= 15) {
-        return true;
-    }
-    else {
+    if (username.size() < 4 || username.size() > 15)
         return false;
+
+    for (char c : username) {
+        if (!isalnum(c))
+            return false;
     }
+    return true;
 }
