@@ -59,9 +59,9 @@
 ### 🎨 the client
 - [ ] add the serialization logic to the client
 - [ ] and add tui to the apps
-- [ ] make a protocol so you can get your contacts from the server `CONTACTs`
-- [ ] add the contacts command logic
- 
+- [x] make a protocol so you can get your contacts from the server `CONTACTs`
+- [x] add the contacts command logic
+- [ ] refactor contacts into its own class
 ### 📊 Reporting System
 - [ ] Add static counters in `Server` to track:
   - Number of users
