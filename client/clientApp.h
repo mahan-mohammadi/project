@@ -7,8 +7,8 @@ using namespace std;
 
 class App{
     public:
-        App();s
-        void run();
+    App();
+    void run();
     private:
     Client client;
     void drawMainMenu();
