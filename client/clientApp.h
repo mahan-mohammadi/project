@@ -11,7 +11,10 @@ class App{
     void run();
     private:
     Client client;
-    void drawMainMenu();
+    void drawPrimaryMenu();
     void loginMenu();
     void registerMenu();
+    void mainAppMenu();
+    void drawMainMenu();
+    string username;
 };

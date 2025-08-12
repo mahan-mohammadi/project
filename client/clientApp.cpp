@@ -7,31 +7,31 @@ App::App(): client(IP, PORT){
  //empty
 }
 
-void App::drawMainMenu(){
+void App::drawPrimaryMenu(){
     system("clear");
-    std::cout << "  ┌──────────────────────────────────────────┐\n";
-    std::cout << "  │                                          │\n";
-    std::cout << "  │       Welcome to Your Messanger CLI      │\n";
-    std::cout << "  │                                          │\n";
-    std::cout << "  ├──────────────────────────────────────────┤\n";
-    std::cout << "  │                                          │\n";
-    std::cout << "  │           ┌────────────────────┐         │\n";
-    std::cout << "  │           │      1.Login       │         │\n";
-    std::cout << "  │           └────────────────────┘         │\n";
-    std::cout << "  │           ┌────────────────────┐         │\n";
-    std::cout << "  │           │      2.Register    │         │\n";
-    std::cout << "  │           └────────────────────┘         │\n";
-    std::cout << "  │                                          │\n";
-    std::cout << "  │                                          │\n";
-    std::cout << "  └──────────────────────────────────────────┘\n";
+    cout << "  ┌──────────────────────────────────────────┐\n";
+    cout << "  │                                          │\n";
+    cout << "  │       Welcome to Your Messanger CLI      │\n";
+    cout << "  │                                          │\n";
+    cout << "  ├──────────────────────────────────────────┤\n";
+    cout << "  │                                          │\n";
+    cout << "  │           ┌────────────────────┐         │\n";
+    cout << "  │           │      1.Login       │         │\n";
+    cout << "  │           └────────────────────┘         │\n";
+    cout << "  │           ┌────────────────────┐         │\n";
+    cout << "  │           │      2.Register    │         │\n";
+    cout << "  │           └────────────────────┘         │\n";
+    cout << "  │                                          │\n";
+    cout << "  │                                          │\n";
+    cout << "  └──────────────────────────────────────────┘\n";
 }
 
 void App::run(){
     if (!client.connectToServer()) {
-        std::cerr << "Failed to connect to the server." << std::endl;
+        cerr << "Failed to connect to the server." << endl;
         return;
     }
-    drawMainMenu();
+    drawPrimaryMenu();
     bool running = false;
     while (running) {
 
@@ -53,7 +53,7 @@ void App::run(){
         }
 }
     client.disconnectFromServer();
-    cout << "Disconnected from the server." << std::endl;
+    cout << "Disconnected from the server." << endl;
 }
 
 void App::registerMenu(){
@@ -110,9 +110,8 @@ void App::loginMenu(){
 
     if (response.find("SUCC", 0) == 0){
         cout << "\nLogin successful!" << endl;
-        // Here you would transition to the main part of your application
-        // For now, we'll just show a message.
-        cout << "Welcome back, " << username << "!" << endl;
+        this->username = username;
+        mainAppMenu();
     } else {
         cout << "\nLogin failed. Server response: " << response << endl;
     }
@@ -120,4 +119,23 @@ void App::loginMenu(){
     cout << "Press enter to continue...";
     int garbage;
     cin >>garbage;
+}
+
+void App::mainAppMenu(){
+
+}
+
+void App::drawMainMenu(){
+    system("clear");
+    cout << "logged in as " << this->username << '\n';
+    cout << "  ┌──────────────────────────────────────────┐\n";
+    cout << "  │                                          │\n";
+    cout << "  ├──────────────────────────────────────────┤\n";
+    cout << "  │                                          │\n";
+    cout << "  │      1. View All Contacts                │\n";
+    cout << "  │      2. Send Message                     │\n";
+    cout << "  │      3. Get Stats                        │\n";
+    cout << "  │      4. Exit                             │\n";
+    cout << "  │                                          │\n";
+    cout << "  └──────────────────────────────────────────┘\n";
 }
