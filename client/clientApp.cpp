@@ -1,5 +1,7 @@
 #include "clientApp.h"
 #include <iostream>
+#include "userutils.h"
+#include "enc.h"
 
 App::App(): client(IP, PORT){
  //empty
@@ -51,5 +53,40 @@ void App::run(){
         }
 }
     client.disconnectFromServer();
-    std::cout << "Disconnected from the server." << std::endl;
+    cout << "Disconnected from the server." << std::endl;
+}
+
+void App::registerMenu(){
+    string username, displayName, password;
+    cout << "-------- Register --------\n";
+
+    do {
+        cout << "Enter username (4-15 chars): ";
+        cin >> username;
+    } while (!UserUtils::isUsernameValid(username));
+
+    cout << "Enter display name: ";
+    cin >> displayName;
+
+    do {
+        cout << "Enter password (8-20 chars,letters and numbers only): ";
+        cin >> password;
+    } while (!UserUtils::isPassValid(password));
+
+    Encryption enc(password);
+    string command = "REGISTER " + username + " " + displayName + " " + enc.getEncText();
+
+    client.sendMessage(command);
+    string response = client.receiveMessage();
+    // checks if "SUCC" is found starting at position 0.
+    if (response.find("SUCC", 0) == 0){
+        cout << "Registration successful! You can now log in." << endl;
+    } else {
+            cout << "Registration failed. Server response: " << response << endl;
+    }
+
+    cout << "Press enter to continue...";
+    int garbage;
+    cin >>garbage;
+
 }

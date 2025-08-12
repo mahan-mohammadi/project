@@ -13,7 +13,7 @@ bool UserUtils::isPassValid(string password) {
             return false;
         if (isalpha(c))
             hasAlpha = true;
-        if (isdigit(static_cast<unsigned char>(c)))
+        if (isdigit(c))
             hasNum = true;
     }
 

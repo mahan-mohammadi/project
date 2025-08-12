@@ -7,9 +7,11 @@ using namespace std;
 
 class App{
     public:
-        App();
+        App();s
         void run();
     private:
     Client client;
     void drawMainMenu();
+    void loginMenu();
+    void registerMenu();
 };
