@@ -122,7 +122,31 @@ void App::loginMenu(){
 }
 
 void App::mainAppMenu(){
+    drawMainMenu();
 
+    bool valid = false;
+    while(!valid){
+        int choice;
+        cout << "Enter your choice (1, 2, 3 , 4 ): ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            viewContactsMenu();
+            break;
+        case 2:
+            sendMessageMenu();
+            break;
+        case 3:
+            getStats();
+            break;
+        case 4:
+            break;
+        default:
+            cout << "Invalid choice. Please try again." << endl;
+            break;
+        }
+    }
 }
 
 void App::drawMainMenu(){

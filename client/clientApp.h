@@ -16,5 +16,8 @@ class App{
     void registerMenu();
     void mainAppMenu();
     void drawMainMenu();
+    void viewContactsMenu();
+    void sendMessageMenu();
+    void getStats();
     string username;
 };
