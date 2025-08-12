@@ -57,6 +57,7 @@ void App::run(){
 }
 
 void App::registerMenu(){
+    system("clear");
     string username, displayName, password;
     cout << "-------- Register --------\n";
 
@@ -82,11 +83,41 @@ void App::registerMenu(){
     if (response.find("SUCC", 0) == 0){
         cout << "Registration successful! You can now log in." << endl;
     } else {
-            cout << "Registration failed. Server response: " << response << endl;
+        cout << "Registration failed. Server response: " << response << endl;
     }
 
     cout << "Press enter to continue...";
     int garbage;
     cin >>garbage;
 
+}
+
+void App::loginMenu(){
+    system("clear");
+    string username, password;
+
+    cout << "Enter username: ";
+    cin >> username;
+
+    cout << "Enter password: ";
+    cin >> password;
+
+    Encryption enc(password);
+    string command = "LOGIN " + username + " " + enc.getEncText();
+
+    client.sendMessage(command);
+    string response = client.receiveMessage();
+
+    if (response.find("SUCC", 0) == 0){
+        cout << "\nLogin successful!" << endl;
+        // Here you would transition to the main part of your application
+        // For now, we'll just show a message.
+        cout << "Welcome back, " << username << "!" << endl;
+    } else {
+        cout << "\nLogin failed. Server response: " << response << endl;
+    }
+
+    cout << "Press enter to continue...";
+    int garbage;
+    cin >>garbage;
 }
