@@ -7,15 +7,15 @@ using namespace std;
 class Contact{
     public:
 
-    Contact();
-    Contact(string , string);
-    Contact(json);
+        Contact();
+        Contact(string , string);
+        Contact(json);
 
-    string getUsername();
-    string getDisplayName();
-    string toString();
+        string getUsername();
+        string getDisplayName();
+        string toString();
     private:
         string username;
-        string DisplayName;
-        
+        string displayName;
+
 };
