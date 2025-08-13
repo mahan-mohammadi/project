@@ -116,7 +116,7 @@ void App::loginMenu(){
         cout << "\nLogin failed. Server response: " << response << endl;
     }
 
-    cout << "Press enter to continue...";
+    cout << "Press 0 to continue...";
     int garbage;
     cin >>garbage;
 }
@@ -151,7 +151,7 @@ void App::mainAppMenu(){
 
 void App::drawMainMenu(){
     system("clear");
-    cout << "logged in as " << this->username << '\n';
+    cout << "   logged in as " << this->username << '\n';
     cout << "  ┌──────────────────────────────────────────┐\n";
     cout << "  │                                          │\n";
     cout << "  ├──────────────────────────────────────────┤\n";
@@ -162,4 +162,30 @@ void App::drawMainMenu(){
     cout << "  │      4. Exit                             │\n";
     cout << "  │                                          │\n";
     cout << "  └──────────────────────────────────────────┘\n";
+}
+
+void App::sendMessageMenu() {
+    system("clear");
+    string recipient, message;
+
+    cout << "Enter recipient's username: ";
+    cin >> recipient;
+
+    cout << "Enter your message: ";
+    cin.ignore(); //clean the \n
+    getline(cin, message);
+
+    string command = "SEND " + recipient + " " + message;
+
+    client.sendMessage(command);
+    string response = client.receiveMessage();
+
+    if (response.find("SUCC", 0) == 0) {
+        cout << "\nMessage sent successfully!" << endl;
+    } else {
+        cout << "\nFailed to send message. Server response: " << response << endl;
+    }
+
+    cout << "Press enter to continue...";
+    cin.get(); 
 }
