@@ -2,6 +2,8 @@
 #include <map>
 #include "userdb.h"
 #include <functional>
+#include "contact.h"
+#include "contactsdb.h"
 
 using namespace std;
 using CommandHandler = function<void(int, stringstream&)>;
@@ -22,6 +24,7 @@ private:
     void setUpCommandMap();
     map<string, CommandHandler> commandMap;
     UserDB userdb;
+    ContactsDB contactsdb;
     int port;
     int listener_fd;
     fd_set master_fds;

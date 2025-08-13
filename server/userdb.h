@@ -19,4 +19,5 @@ public:
     int getNewID();
     bool userNameAlreadyExist(string);
     User* findUserByUsername(string);
+    User* findUserById(int);
 };
