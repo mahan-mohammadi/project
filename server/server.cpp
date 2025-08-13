@@ -170,6 +170,69 @@ void Server::handleLogin(int client_fd, stringstream& ss) {
     }
 }
 
+void Server::handleSend(int client_fd, stringstream& ss) {
+    if (!clients[client_fd].isLogedIn) {
+        send(client_fd, "ERROR Not logged in\n", 20, 0);
+        return;
+    }
+
+    string contact;
+    ss >> contact;
+
+    User* reciver = userdb.findUserByUsername(contact);
+    if (reciver == nullptr) {
+        send(client_fd, "ERROR User not found\n", 21, 0);
+        return;
+    }
+
+    string message;
+    getline(ss, message);
+
+
+    MessageDB::saveMessage(Message(clients[client_fd].id, reciver->getID(), message));
+    send(client_fd, "SUCC\n", 5, 0);
+
+    int senderId = clients[client_fd].id;
+    string recipientDisplayName = reciver->getDName();
+    string senderIdStr = to_string(senderId);
+
+    // Open and read the contacts.json file
+    ifstream contactsFileIn("contacts.json");
+    json allContacts;
+    if (contactsFileIn.is_open()) {
+        contactsFileIn >> allContacts;
+        contactsFileIn.close();
+    } else {
+        // If the file doesn't exist, start with an empty object
+        allContacts = json::object();
+    }
+
+
+    // Get the sender's contact list, creating it if it doesn't exist
+    json& senderContacts = allContacts[senderIdStr];
+    if (!senderContacts.is_array()) {
+        senderContacts = json::array();
+    }
+
+    // Check if the recipient is already in the sender's contact list
+    bool alreadyAContact = false;
+    for (const auto& existingContact : senderContacts) {
+        if (existingContact.get<string>() == recipientDisplayName) {
+            alreadyAContact = true;
+            break;
+        }
+    }
+
+    // If the recipient is not already a contact, add them
+    if (!alreadyAContact) {
+        senderContacts.push_back(recipientDisplayName);
+
+        // Write the updated contacts back to the file
+        ofstream contactsFileOut("contacts.json");
+        contactsFileOut << allContacts.dump(2); // Using an indent of 2 for readability
+        contactsFileOut.close();
+    }
+}
 
 void Server::handleHistory(int client_fd, stringstream& ss) {
     if (!clients[client_fd].isLogedIn) {
