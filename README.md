@@ -61,8 +61,8 @@
 - [ ] and add tui to the apps
 - [x] make a protocol so you can get your contacts from the server `CONTACTs`
 - [x] add the contacts command logic
-- [ ] refactor contacts into its own class `contactsdb`
-- [ ] fix being able to send message to youreld
+- [ ] refactor contacts into its own class `contactsdb`1
+- [x] fix being able to send message to youreld
 
 ### 📊 Reporting System
 - [ ] Add static counters in `Server` to track:
@@ -77,8 +77,3 @@
 
 - [ ] Build a **Graphical User Interface (GUI)** for the client app (Qt/GTK/ncurses/etc.)
 
----
-
-## ✅ Tips
-- Use `// TODO:` comments in code to reference these checkboxes.
-- Consider using `clang-tidy` or `cppcheck` to keep code clean.
