@@ -11,8 +11,9 @@ Contact::Contact(string username, string displayName) {
 }
 
 Contact::Contact(json j) {
-    this->username = j.at("username").get<string>();
-    this->displayName = j.at("displayName").get<string>();
+    j.at("id").get_to(id);
+    j.at("username").get_to(username);
+    j.at("displayName").get_to(displayName);
 }
 
 string Contact::getUsername() {
@@ -28,4 +29,23 @@ string Contact::toString() {
     // for some reason you cant use << on strings
     ss << username << " " << displayName;
     return ss.str();
+}
+
+json Contact::toJson() {
+    return {
+        {"id", id},
+        {"username", username},
+        {"displayName", displayName}
+    };
+}
+
+
+int Contact::getID(){
+    return id;
+}
+
+Contact::Contact(User user){
+    id = user.getID();
+    username = user.getUsername();
+    displayName = user.getDName();
 }
