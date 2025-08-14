@@ -29,15 +29,11 @@ void App::drawPrimaryMenu(){
     cout << "  └──────────────────────────────────────────┘\n";
 }
 
-void App::run(){
-    if (!client.connectToServer()) {
-        cerr << "Failed to connect to the server." << endl;
-        return;
-    }
-    drawPrimaryMenu();
+
+void App::primaryMenu(){
     bool running = false;
     while (!running) {
-
+        drawPrimaryMenu();
         int choice;
         cout << "Enter your choice (1, 2, or 3 for exit): ";
         cin >> choice;
@@ -46,7 +42,7 @@ void App::run(){
                 loginMenu();
                 break;
             case 2:
-                registerMenu();
+               registerMenu();
                 break;
             case 3:
                 running = false;
@@ -55,6 +51,16 @@ void App::run(){
                 cout << "Invalid choice. Please try again." << endl;
         }
 }
+}
+
+void App::run(){
+    if (!client.connectToServer()) {
+        cerr << "Failed to connect to the server." << endl;
+        return;
+    }
+
+    primaryMenu();
+    
     client.disconnectFromServer();
     cout << "Disconnected from the server." << endl;
 }
@@ -125,11 +131,12 @@ void App::loginMenu(){
 }
 
 void App::mainAppMenu(){
-    drawMainMenu();
+    system("clear");
 
     bool valid = false;
     while(!valid){
         int choice;
+        drawMainMenu();
         cout << "Enter your choice (1, 2, 3 , 4 ): ";
         cin >> choice;
         switch (choice)
@@ -144,6 +151,7 @@ void App::mainAppMenu(){
             //getStats();
             break;
         case 4:
+            primaryMenu();
             break;
         default:
             cout << "Invalid choice. Please try again." << endl;
@@ -223,4 +231,8 @@ void App::viewContactsMenu(){
                 }
             }
         }
-    }
+
+    cout << "Press enter to continue...";
+    cin.ignore(); //the enter from the previous menu still causes problem here
+    cin.get(); 
+}

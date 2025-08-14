@@ -11,6 +11,7 @@ class App{
     void run();
     private:
     Client client;
+    void primaryMenu();
     void drawPrimaryMenu();
     void loginMenu();
     void registerMenu();
