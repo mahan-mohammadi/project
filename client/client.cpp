@@ -2,12 +2,11 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <cstring> // For memset
 
 /**
  * @brief Constructs the Client object.
  */
-Client::Client(const string& serverIP, int port) {
+Client::Client(string serverIP, int port) {
     this->serverIP = serverIP;
     this->port = port;
     this->client_fd = -1;

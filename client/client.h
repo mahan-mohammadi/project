@@ -7,7 +7,7 @@ using namespace std;
 
 class Client {
 public:
-    Client(const string& serverIP, int port);
+    Client(string serverIP, int port);
     ~Client();
 
     // Establishes the connection to the server.

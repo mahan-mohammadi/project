@@ -2,6 +2,9 @@
 #include <iostream>
 #include "userutils.h"
 #include "enc.h"
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 App::App(): client(IP, PORT){
  //empty
@@ -189,3 +192,35 @@ void App::sendMessageMenu() {
     cout << "Press enter to continue...";
     cin.get(); 
 }
+
+
+void App::viewContactsMenu(){
+    system("clear");
+    cout << "┌──────────────────────────┐\n";
+    cout << "│      Your Contacts       │\n";
+    cout << "└──────────────────────────┘\n\n";
+
+    string command = "CONTACTS";
+    client.sendMessage(command);
+    string response = client.receiveMessage();
+    
+      if (response.rfind("ERROR", 0) == 0) {
+        cout << "Could not retrieve contacts. Server response: " << response << endl;
+    } else if (response.empty()) {
+        cout << "You don't have any contacts yet. Send a message to add one!\n";
+    } else {
+            json contactslist = json::parse(response);
+
+            if (contactslist.empty()) {
+                cout << "You don't have any contacts yet. Send a message to add one!\n";
+            } else {
+                int count = 1;
+                for (json contact : contactslist) {
+                    string displayName = contact.at("displayName").get<string>();
+                    string username = contact.at("username").get<string>();
+                    cout << "  " << count << ". " << displayName << " (@" << username << ")\n";
+                    count++;
+                }
+            }
+        }
+    }

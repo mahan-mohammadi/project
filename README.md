@@ -61,7 +61,7 @@
 - [ ] and add tui to the apps
 - [x] make a protocol so you can get your contacts from the server `CONTACTs`
 - [x] add the contacts command logic
-- [ ] refactor contacts into its own class `contactsdb`
+- [x] refactor contacts into its own class `contactsdb`
 - [x] fix being able to send message to youreld
 
 ### 📊 Reporting System
