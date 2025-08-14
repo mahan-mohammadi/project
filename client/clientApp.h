@@ -18,6 +18,6 @@ class App{
     void drawMainMenu();
     void viewContactsMenu();
     void sendMessageMenu();
-    void getStats();
+    //void getStats();
     string username;
 };

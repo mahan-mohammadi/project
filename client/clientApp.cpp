@@ -36,7 +36,7 @@ void App::run(){
     }
     drawPrimaryMenu();
     bool running = false;
-    while (running) {
+    while (!running) {
 
         int choice;
         cout << "Enter your choice (1, 2, or 3 for exit): ";
@@ -141,7 +141,7 @@ void App::mainAppMenu(){
             sendMessageMenu();
             break;
         case 3:
-            getStats();
+            //getStats();
             break;
         case 4:
             break;

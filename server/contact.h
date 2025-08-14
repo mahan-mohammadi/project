@@ -1,6 +1,9 @@
+#ifndef CONTACT_H // "If USER_H has not been defined yet..."
+#define CONTACT_H 
+
 #include <string>
 #include "json.hpp"
-#include <user.h>
+#include "user.h"
 
 using json = nlohmann::json;
 using namespace std;
@@ -24,3 +27,5 @@ class Contact{
         string displayName;
 
 };
+
+#endif

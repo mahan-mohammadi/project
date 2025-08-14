@@ -1,3 +1,6 @@
+#ifndef USER_H // "If USER_H has not been defined yet..."
+#define USER_H 
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -21,3 +24,5 @@ public:
     string getPass();
     void print();
 };
+
+#endif
