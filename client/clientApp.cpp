@@ -276,7 +276,11 @@ void App::viewMessagesWithContact(string contactUsername){
         if (messages.empty()) {
                 cout << "No messages with this user yet. Be the first to say hi!" << endl;
         } else {
-            //show the messages
+            for(json message : messages){
+                string content = message.at("message").get<string>();
+            }
         }
     } 
+     cout << "Press enter to continue...";
+    cin.get();
 }
