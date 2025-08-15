@@ -57,12 +57,13 @@
 ## 📁 Phase 4: client & Reporting (🔨 Current Focus)
 
 ### 🎨 the client
-- [ ] add the serialization logic to the client
-- [ ] and add tui to the apps
+- [x] add the serialization logic to the client
+- [x] and add tui to the apps
 - [x] make a protocol so you can get your contacts from the server `CONTACTs`
 - [x] add the contacts command logic
 - [x] refactor contacts into its own class `contactsdb`
 - [x] fix being able to send message to youreld
+- [ ] add the unused stuff (cmake) to git ignore
 
 ### 📊 Reporting System
 - [ ] Add static counters in `Server` to track:
