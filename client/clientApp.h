@@ -19,6 +19,8 @@ class App{
     void drawMainMenu();
     void viewContactsMenu();
     void sendMessageMenu();
+    void viewMessagesWithContact(string);
+
     //void getStats();
     string username;
 };

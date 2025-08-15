@@ -5,6 +5,7 @@
 #include "json.hpp"
 
 using json = nlohmann::json;
+using namespace std;
 
 App::App(): client(IP, PORT){
  //empty
@@ -223,16 +224,59 @@ void App::viewContactsMenu(){
                 cout << "You don't have any contacts yet. Send a message to add one!\n";
             } else {
                 int count = 1;
+                cout << "------------------------------------------\n";
                 for (json contact : contactslist) {
                     string displayName = contact.at("displayName").get<string>();
                     string username = contact.at("username").get<string>();
                     cout << "  " << count << ". " << displayName << " (@" << username << ")\n";
                     count++;
                 }
+                cout << "------------------------------------------\n";
+                cout << "Enter a contact number to view messages, or 0 to go back: ";
+                int choice;
+                cin >> choice;
+
+                if ( choice < 0 || choice > count) {
+                     cout << "\nInvalid choice. Returning to the main menu." << endl;
             }
+                else{
+                    int index = 1;
+                    for (json contact : contactslist){
+                        if(index == choice){
+                            string contactUsername = contact.at("username").get<string>();
+
+                            viewMessagesWithContact(contactUsername);
+                            return;
+                        }
+                        index++;
+                    }
+                }
         }
 
     cout << "Press enter to continue...";
     cin.ignore(); //the enter from the previous menu still causes problem here
     cin.get(); 
+}
+}
+
+void App::viewMessagesWithContact(string contactUsername){
+    system("clear");
+    cout << "┌──────────────────────────────────────────┐\n";
+    cout << "│        Messages with contact             │ \n";
+    cout << "└──────────────────────────────────────────┘\n\n";
+
+    string command = "HISTORY" + contactUsername;
+    client.sendMessage(command);
+    string response = client.receiveMessage();
+
+    if (response.rfind("ERROR", 0) == 0) {
+        cout << "Could not retrieve messages. Server response: " << response << endl;
+    } else {
+        json messages = json::parse(response);
+        if (messages.empty()) {
+                cout << "No messages with this user yet. Be the first to say hi!" << endl;
+        } else {
+            //show the messages
+        }
+    } 
 }
