@@ -143,9 +143,11 @@ void Server::handleRegister(int client_fd, stringstream &ss) {
     string username, encpassword, display;
     ss >> username >> display >> encpassword;
     if(userdb.userNameAlreadyExist(username)) {
+        cout << "username : " << username << " was already taken";
         send(client_fd, "ERROR Username is already taken.\n", 33, 0);
     }
     else {
+        cout << "handling the registeration for username: " << username << endl;
         int id = userdb.getNewID();
         User newUser(id, username, display, encpassword);
         userdb.add(newUser);
@@ -159,13 +161,16 @@ void Server::handleLogin(int client_fd, stringstream& ss) {
     User* user = userdb.findUserByUsername(username);
     if(user != nullptr) {
         if(user->getPass() == encpass) {
+            cout << "loging in the user: " << username << endl;
             clients[client_fd].isLogedIn = true;
             clients[client_fd].id = user->getID();
             send(client_fd, "SUCC\n", 5, 0);
         } else {
+            cout << "user: " << username << " password was wrong!" << endl;
             send(client_fd, "ERROR Invalid credentials\n", 26, 0);
         }
     } else {
+        cout << "user: " << username << " doesnt exist in the db" << endl;
         send(client_fd, "ERROR User not found\n", 21, 0);
     }
 }
@@ -182,6 +187,7 @@ void Server::handleSend(int client_fd, stringstream& ss) {
 
     User* recipient = userdb.findUserByUsername(recipientUsername);
     if (recipient == nullptr) {
+        cout << "reciver user doesnt exsit" << endl;
         send(client_fd, "ERROR User not found\n", 21, 0);
         return;
     }
@@ -206,11 +212,13 @@ void Server::handleSend(int client_fd, stringstream& ss) {
     // Save the message
     MessageDB::saveMessage(Message(senderId, recipient->getID(), message));
 
+    cout << "a message was sent between " << senderId << " and " << recipient->getID() << endl;
     send(client_fd, "SUCC\n", 5, 0);
 }
 
 void Server::handleHistory(int client_fd, stringstream& ss) {
     if (!clients[client_fd].isLogedIn) {
+        cout << "user is not logged in" << endl;
         send(client_fd, "ERROR Not logged in\n", 20, 0);
         return;
     }
@@ -220,18 +228,15 @@ void Server::handleHistory(int client_fd, stringstream& ss) {
 
     User* reciver = userdb.findUserByUsername(contact);
     if (reciver == nullptr) {
+        cout << "user was not found" << endl;
         send(client_fd, "ERROR User not found\n", 21, 0);
-        return;
-    }
-
-    if (clients[client_fd].id == reciver->getID()) {
-        send(client_fd, "ERROR You can't send a message to yourself.\n", 43, 0);
         return;
     }
 
     json history = MessageDB::getMessagesOf(clients[client_fd].id, reciver->getID());
     string historyStr = history.dump();
 
+    cout << "sending history to " <<  clients[client_fd].id << endl;
     send(client_fd, historyStr.c_str(), historyStr.length(), 0);
 }
 

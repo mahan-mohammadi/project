@@ -244,7 +244,6 @@ void App::viewContactsMenu(){
                     for (json contact : contactslist){
                         if(index == choice){
                             string contactUsername = contact.at("username").get<string>();
-
                             viewMessagesWithContact(contactUsername);
                             return;
                         }
@@ -265,7 +264,7 @@ void App::viewMessagesWithContact(string contactUsername){
     cout << "│        Messages with contact             │ \n";
     cout << "└──────────────────────────────────────────┘\n\n";
 
-    string command = "HISTORY" + contactUsername;
+    string command = "HISTORY " + contactUsername;
     client.sendMessage(command);
     string response = client.receiveMessage();
 
@@ -278,9 +277,12 @@ void App::viewMessagesWithContact(string contactUsername){
         } else {
             for(json message : messages){
                 string content = message.at("message").get<string>();
+                cout << content << endl;
+
             }
         }
     } 
-     cout << "Press enter to continue...";
+    cout << "Press enter to continue...";
+    cin.ignore();
     cin.get();
 }
