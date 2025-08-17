@@ -3,6 +3,7 @@
 #include "userutils.h"
 #include "enc.h"
 #include "json.hpp"
+#include <ctime>
 
 using json = nlohmann::json;
 using namespace std;
@@ -276,9 +277,16 @@ void App::viewMessagesWithContact(string contactUsername){
                 cout << "No messages with this user yet. Be the first to say hi!" << endl;
         } else {
             for(json message : messages){
+                cout << "-----------------------------------" << endl;
                 string content = message.at("message").get<string>();
+                string sender = message.at("senderDisplayName").get<string>();
+                string reciver = message.at("reciverDisplayName").get<string>();
+                time_t timestamp = message.at("timestamp").get<time_t>();
+                string timestr = UserUtils::formatTimestamp(timestamp);
+                cout << "from: "<< sender << endl;
                 cout << content << endl;
-
+                cout << "time: " <<timestr << endl;
+                cout << "-----------------------------------\n" << endl;
             }
         }
     } 

@@ -1,5 +1,6 @@
 #include "userutils.h"
-
+#include <iomanip>
+#include <sstream>
 bool UserUtils::isPassValid(string password) {
     bool isValidSize = false;
     bool hasNum = false;
@@ -29,4 +30,11 @@ bool UserUtils::isUsernameValid(string username) {
             return false;
     }
     return true;
+}
+
+string UserUtils::formatTimestamp(time_t time){
+    std::tm* ptm = std::localtime(&time);
+    std::stringstream ss;
+    ss << std::put_time(ptm, "%Y-%m-%d %H:%M:%S"); // Format: YYYY-MM-DD HH:MM:SS
+    return ss.str();
 }
