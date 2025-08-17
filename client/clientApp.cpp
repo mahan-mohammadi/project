@@ -46,7 +46,7 @@ void App::primaryMenu(){
                registerMenu();
                 break;
             case 3:
-                running = true;
+                exit(0);
                 break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
