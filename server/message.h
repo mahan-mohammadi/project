@@ -8,17 +8,21 @@ using json = nlohmann::json;
 class Message{
     public:
     Message();
-    Message(int, int, string );
+    Message(int, int, string , string , string);
     // so we can load from the db without updating the timestamp
     Message(json);
     int getSenderId();
     int getReciverId();
+    string getSenderDisplayName();
+    string getReciverDisplayName();
     string getMessage();
     time_t getTime();
     json toJson();
     private:
     int senderId;
     int reciverId;
+    string senderDname;
+    string reciverDname;
     string message;
     time_t timestamp;
 };

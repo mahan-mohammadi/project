@@ -5,12 +5,16 @@ Message::Message(){
     reciverId = 0;
     message = "";
     timestamp = time(nullptr);
+    senderDname = "";
+    reciverDname = "";
 }
 
-Message::Message(int senderId , int reciverId , string message){
+Message::Message(int senderId , int reciverId , string message , string senderDisplayName , string reciverDisplayName){
     this->senderId = senderId;
     this->reciverId = reciverId;
     this->message = message;
+    this->senderDname = senderDisplayName;
+    this->reciverDname = reciverDisplayName;
     timestamp = time(nullptr);
 }
 
@@ -43,6 +47,15 @@ json Message::toJson(){
     j["reciverId"] = this->reciverId;
     j["message"] = this->message;
     j["timestamp"] = this->timestamp;
-
+    j["senderDisplayName"] = senderDname;
+    j["reciverDisplayName"] = reciverDname; 
     return j;
+}
+
+string Message::getSenderDisplayName() {
+    return senderDname;
+}
+
+string Message::getReciverDisplayName() {
+    return reciverDname;
 }
