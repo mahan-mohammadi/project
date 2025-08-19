@@ -9,23 +9,13 @@ class Client {
 public:
     Client(string serverIP, int port);
     ~Client();
-
-    // Establishes the connection to the server.
     bool connectToServer();
-
-    // Closes the connection.
     void disconnectFromServer();
 
-    // Sends a message to the server. Returns false on error.
-    bool sendMessage(const string& message);
-
-    // Waits for and returns a message from the server.
-    // Returns an empty string on error or disconnection.
+    //Returns false on error.
+    bool sendMessage(string message);
     string receiveMessage();
-
-    // Checks if the client is currently connected.
-    bool isConnected() const;
-
+    bool isConnected();
 private:
     string serverIP;
     int port;
@@ -33,4 +23,4 @@ private:
     bool connected;
 };
 
-#endif // CLIENT_H
+#endif

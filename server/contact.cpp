@@ -26,7 +26,7 @@ string Contact::getDisplayName() {
 
 string Contact::toString() {
     stringstream ss;
-    // for some reason you cant use << on strings
+    // for some reason you cant use << on strings so i used the stringstream
     ss << username << " " << displayName;
     return ss.str();
 }

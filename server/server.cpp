@@ -212,8 +212,6 @@ void Server::handleSend(int client_fd, stringstream& ss) {
     string senderDisplayName = sender->getDName();
     string reciverDisplayName = recipient->getDName();
 
-    //we 
-    // Save the message
     MessageDB::saveMessage(Message(senderId, recipient->getID(), message , senderDisplayName , reciverDisplayName ));
 
     cout << "a message was sent between " << senderId << " and " << recipient->getID() << endl;
@@ -256,7 +254,7 @@ void Server::handleContacts(int client_fd , stringstream& ss){
     json allContacts;
     contactsFile >> allContacts;
 
-    string userIdStr = to_string(userId); //all json keys are strings it cant be int
+    string userIdStr = to_string(userId); //all json keys are strings so it cant be int
 
     
     //end points to the position just after the array in json
