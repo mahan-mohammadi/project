@@ -32,7 +32,7 @@ private:
     map<int, UserInfo> clients;
     void handleRegister(int, stringstream&);
     void handleLogin(int, stringstream&);
-    void handleSend(int , stringstream&);
+    void handleSend(int, stringstream&);
     void handleHistory(int, stringstream&);
-    void handleContacts(int , stringstream&);
+    void handleContacts(int, stringstream&);
 };

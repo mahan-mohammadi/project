@@ -5,11 +5,11 @@
 
 using namespace std;
 
-class App {
-public:
+class App{
+    public:
     App();
     void run();
-private:
+    private:
     Client client;
     void primaryMenu();
     void drawPrimaryMenu();

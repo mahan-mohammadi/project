@@ -1,5 +1,5 @@
 #ifndef USER_H // "If USER_H has not been defined yet..."
-#define USER_H 
+#define USER_H
 
 #include <iostream>
 #include <string>

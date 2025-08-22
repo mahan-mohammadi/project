@@ -5,17 +5,17 @@
 using json = nlohmann::json;
 using namespace std;
 
-class ContactsDB{
-    public:
-        ContactsDB();
-        ContactsDB(string);
-        void addContact(int , User);
-        json getContactsJson(int);
+class ContactsDB {
+public:
+    ContactsDB();
+    ContactsDB(string);
+    void addContact(int, User);
+    json getContactsJson(int);
 
-    private:
-        string filename;
-        json contactslist;
-        void load();
-        void save();
+private:
+    string filename;
+    json contactslist;
+    void load();
+    void save();
 
 };

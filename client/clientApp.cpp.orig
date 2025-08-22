@@ -8,11 +8,11 @@
 using json = nlohmann::json;
 using namespace std;
 
-App::App(): client(IP, PORT) {
-//empty
+App::App(): client(IP, PORT){
+ //empty
 }
 
-void App::drawPrimaryMenu() {
+void App::drawPrimaryMenu(){
     system("clear");
     cout << "  ┌──────────────────────────────────────────┐\n";
     cout << "  │                                          │\n";
@@ -32,7 +32,7 @@ void App::drawPrimaryMenu() {
 }
 
 
-void App::primaryMenu() {
+void App::primaryMenu(){
     bool running = false;
     while (!running) {
         drawPrimaryMenu();
@@ -40,34 +40,34 @@ void App::primaryMenu() {
         cout << "Enter your choice (1, 2, or 3 for exit): ";
         cin >> choice;
         switch (choice) {
-        case 1:
-            loginMenu();
-            break;
-        case 2:
-            registerMenu();
-            break;
-        case 3:
-            exit(0);
-            break;
-        default:
-            cout << "Invalid choice. Please try again." << endl;
+            case 1:
+                loginMenu();
+                break;
+            case 2:
+               registerMenu();
+                break;
+            case 3:
+                exit(0);
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
         }
-    }
+}
 }
 
-void App::run() {
+void App::run(){
     if (!client.connectToServer()) {
         cerr << "Failed to connect to the server." << endl;
         return;
     }
 
     primaryMenu();
-
+    
     client.disconnectFromServer();
     cout << "Disconnected from the server." << endl;
 }
 
-void App::registerMenu() {
+void App::registerMenu(){
     system("clear");
     string username, displayName, password;
     cout << "-------- Register --------\n";
@@ -91,7 +91,7 @@ void App::registerMenu() {
     client.sendMessage(command);
     string response = client.receiveMessage();
     // checks if "SUCC" is found starting at position 0.
-    if (response.find("SUCC", 0) == 0) {
+    if (response.find("SUCC", 0) == 0){
         cout << "Registration successful! You can now log in." << endl;
     } else {
         cout << "Registration failed. Server response: " << response << endl;
@@ -103,7 +103,7 @@ void App::registerMenu() {
 
 }
 
-void App::loginMenu() {
+void App::loginMenu(){
     system("clear");
     string username, password;
 
@@ -119,7 +119,7 @@ void App::loginMenu() {
     client.sendMessage(command);
     string response = client.receiveMessage();
 
-    if (response.find("SUCC", 0) == 0) {
+    if (response.find("SUCC", 0) == 0){
         cout << "\nLogin successful!" << endl;
         this->username = username;
         mainAppMenu();
@@ -132,11 +132,11 @@ void App::loginMenu() {
     cin >>garbage;
 }
 
-void App::mainAppMenu() {
+void App::mainAppMenu(){
     system("clear");
 
     bool valid = false;
-    while(!valid) {
+    while(!valid){
         int choice;
         drawMainMenu();
         cout << "Enter your choice (1, 2, 3 , 4 ): ";
@@ -162,7 +162,7 @@ void App::mainAppMenu() {
     }
 }
 
-void App::drawMainMenu() {
+void App::drawMainMenu(){
     system("clear");
     cout << "   logged in as " << this->username << '\n';
     cout << "  ┌──────────────────────────────────────────┐\n";
@@ -200,11 +200,11 @@ void App::sendMessageMenu() {
     }
 
     cout << "Press enter to continue...";
-    cin.get();
+    cin.get(); 
 }
 
 
-void App::viewContactsMenu() {
+void App::viewContactsMenu(){
     system("clear");
     cout << "┌──────────────────────────┐\n";
     cout << "│      Your Contacts       │\n";
@@ -213,53 +213,53 @@ void App::viewContactsMenu() {
     string command = "CONTACTS";
     client.sendMessage(command);
     string response = client.receiveMessage();
-
-    if (response.rfind("ERROR", 0) == 0) {
+    
+      if (response.rfind("ERROR", 0) == 0) {
         cout << "Could not retrieve contacts. Server response: " << response << endl;
     } else if (response.empty()) {
         cout << "You don't have any contacts yet. Send a message to add one!\n";
     } else {
-        json contactslist = json::parse(response);
+            json contactslist = json::parse(response);
 
-        if (contactslist.empty()) {
-            cout << "You don't have any contacts yet. Send a message to add one!\n";
-        } else {
-            int count = 1;
-            cout << "------------------------------------------\n";
-            for (json contact : contactslist) {
-                string displayName = contact.at("displayName").get<string>();
-                string username = contact.at("username").get<string>();
-                cout << "  " << count << ". " << displayName << " (@" << username << ")\n";
-                count++;
-            }
-            cout << "------------------------------------------\n";
-            cout << "Enter a contact number to view messages, or 0 to go back: ";
-            int choice;
-            cin >> choice;
-
-            if ( choice < 0 || choice > count) {
-                cout << "\nInvalid choice. Returning to the main menu." << endl;
-            }
-            else {
-                int index = 1;
+            if (contactslist.empty()) {
+                cout << "You don't have any contacts yet. Send a message to add one!\n";
+            } else {
+                int count = 1;
+                cout << "------------------------------------------\n";
                 for (json contact : contactslist) {
-                    if(index == choice) {
-                        string contactUsername = contact.at("username").get<string>();
-                        viewMessagesWithContact(contactUsername);
-                        return;
-                    }
-                    index++;
+                    string displayName = contact.at("displayName").get<string>();
+                    string username = contact.at("username").get<string>();
+                    cout << "  " << count << ". " << displayName << " (@" << username << ")\n";
+                    count++;
                 }
+                cout << "------------------------------------------\n";
+                cout << "Enter a contact number to view messages, or 0 to go back: ";
+                int choice;
+                cin >> choice;
+
+                if ( choice < 0 || choice > count) {
+                     cout << "\nInvalid choice. Returning to the main menu." << endl;
             }
+                else{
+                    int index = 1;
+                    for (json contact : contactslist){
+                        if(index == choice){
+                            string contactUsername = contact.at("username").get<string>();
+                            viewMessagesWithContact(contactUsername);
+                            return;
+                        }
+                        index++;
+                    }
+                }
         }
 
-        cout << "Press enter to continue...";
-        cin.ignore(); //the enter from the previous menu still causes problem here
-        cin.get();
-    }
+    cout << "Press enter to continue...";
+    cin.ignore(); //the enter from the previous menu still causes problem here
+    cin.get(); 
+}
 }
 
-void App::viewMessagesWithContact(string contactUsername) {
+void App::viewMessagesWithContact(string contactUsername){
     system("clear");
     cout << "┌──────────────────────────────────────────┐\n";
     cout << "│        Messages with contact             │ \n";
@@ -274,9 +274,9 @@ void App::viewMessagesWithContact(string contactUsername) {
     } else {
         json messages = json::parse(response);
         if (messages.empty()) {
-            cout << "No messages with this user yet. Be the first to say hi!" << endl;
+                cout << "No messages with this user yet. Be the first to say hi!" << endl;
         } else {
-            for(json message : messages) {
+            for(json message : messages){
                 cout << "-----------------------------------" << endl;
                 string content = message.at("message").get<string>();
                 string sender = message.at("senderDisplayName").get<string>();
@@ -289,7 +289,7 @@ void App::viewMessagesWithContact(string contactUsername) {
                 cout << "-----------------------------------\n" << endl;
             }
         }
-    }
+    } 
     cout << "Press enter to continue...";
     cin.ignore();
     cin.get();

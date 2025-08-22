@@ -1,6 +1,6 @@
 #include "contact.h"
 
-Contact::Contact() {
+Contact::Contact(){
     username = "";
     displayName = "";
 }
@@ -40,11 +40,11 @@ json Contact::toJson() {
 }
 
 
-int Contact::getID() {
+int Contact::getID(){
     return id;
 }
 
-Contact::Contact(User user) {
+Contact::Contact(User user){
     id = user.getID();
     username = user.getUsername();
     displayName = user.getDName();

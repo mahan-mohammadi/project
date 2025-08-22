@@ -32,7 +32,7 @@ bool UserUtils::isUsernameValid(string username) {
     return true;
 }
 
-string UserUtils::formatTimestamp(time_t time){
+string UserUtils::formatTimestamp(time_t time) {
     std::tm* ptm = std::localtime(&time);
     std::stringstream ss;
     ss << std::put_time(ptm, "%Y-%m-%d %H:%M:%S"); //YYYY-MM-DD HH:MM:SS

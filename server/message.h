@@ -5,10 +5,10 @@
 using namespace std;
 using json = nlohmann::json;
 
-class Message{
-    public:
+class Message {
+public:
     Message();
-    Message(int, int, string , string , string);
+    Message(int, int, string, string, string);
     // so we can load from the db without updating the timestamp
     Message(json);
     int getSenderId();
@@ -18,7 +18,7 @@ class Message{
     string getMessage();
     time_t getTime();
     json toJson();
-    private:
+private:
     int senderId;
     int reciverId;
     string senderDname;

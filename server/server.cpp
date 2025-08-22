@@ -13,7 +13,7 @@ Server::Server(int port) {
     // --- Create the socket ---
     this->listener_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->listener_fd == -1) {
-        perror("socket"); 
+        perror("socket");
         return;
     }
 
@@ -128,13 +128,13 @@ void Server::setUpCommandMap() {
     commandMap["LOGIN"] = [this](int client_fd, stringstream &ss) {
         this->handleLogin(client_fd,ss);
     };
-    commandMap["SEND"] = [this](int client_fd , stringstream &ss){
+    commandMap["SEND"] = [this](int client_fd, stringstream &ss) {
         this->handleSend(client_fd,ss);
     };
-    commandMap["HISTORY"] = [this](int client_fd , stringstream &ss){
-        this->handleHistory(client_fd , ss);
+    commandMap["HISTORY"] = [this](int client_fd, stringstream &ss) {
+        this->handleHistory(client_fd, ss);
     };
-    commandMap["CONTACTS"] = [this](int client_fd, stringstream &ss){
+    commandMap["CONTACTS"] = [this](int client_fd, stringstream &ss) {
         this->handleContacts(client_fd, ss);
     };
 }
@@ -212,7 +212,7 @@ void Server::handleSend(int client_fd, stringstream& ss) {
     string senderDisplayName = sender->getDName();
     string reciverDisplayName = recipient->getDName();
 
-    MessageDB::saveMessage(Message(senderId, recipient->getID(), message , senderDisplayName , reciverDisplayName ));
+    MessageDB::saveMessage(Message(senderId, recipient->getID(), message, senderDisplayName, reciverDisplayName ));
 
     cout << "a message was sent between " << senderId << " and " << recipient->getID() << endl;
     send(client_fd, "SUCC\n", 5, 0);
@@ -242,7 +242,7 @@ void Server::handleHistory(int client_fd, stringstream& ss) {
     send(client_fd, historyStr.c_str(), historyStr.length(), 0);
 }
 
-void Server::handleContacts(int client_fd , stringstream& ss){
+void Server::handleContacts(int client_fd, stringstream& ss) {
     if (!clients[client_fd].isLogedIn) {
         send(client_fd, "ERROR Not logged in\n", 20, 0);
         return;
@@ -250,13 +250,13 @@ void Server::handleContacts(int client_fd , stringstream& ss){
 
     int userId = clients[client_fd].id;
     ifstream contactsFile("contacts.json");
-    
+
     json allContacts;
     contactsFile >> allContacts;
 
     string userIdStr = to_string(userId); //all json keys are strings so it cant be int
 
-    
+
     //end points to the position just after the array in json
     if (allContacts.find(userIdStr) != allContacts.end()) {
         json userContacts = allContacts[userIdStr];

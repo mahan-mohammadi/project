@@ -83,7 +83,7 @@ User* UserDB::findUserByUsername(string username) {
     return nullptr;
 }
 
-User* UserDB::findUserById(int id){
+User* UserDB::findUserById(int id) {
     for (int i = 0; i < userCount; i++) {
         if (userList[i].getID() == id) {
             return &userList[i];

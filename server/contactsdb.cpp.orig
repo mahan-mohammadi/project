@@ -1,19 +1,19 @@
 #include "contactsdb.h"
 #include <fstream>
 
-ContactsDB::ContactsDB() {
+ContactsDB::ContactsDB(){
     filename = "contacts.json";
     load();
 }
 
-ContactsDB::ContactsDB(string filename) {
+ContactsDB::ContactsDB(string filename){
     this->filename = filename;
     load();
 }
 
 void ContactsDB::load() {
     ifstream file(filename);
-
+    
     if(file.good())
         file >> contactslist;
     else
@@ -44,7 +44,7 @@ void ContactsDB::addContact(int forUserId, User contactToAdd) {
         Contact newContact(contactToAdd);
         contactslist[userIdStr].push_back(newContact.toJson());
         save();
-    }
+}
 }
 
 json ContactsDB::getContactsJson(int userid) {

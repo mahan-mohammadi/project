@@ -1,6 +1,6 @@
 #include "message.h"
 
-Message::Message() {
+Message::Message(){
     senderId = 0;
     reciverId = 0;
     message = "";
@@ -9,7 +9,7 @@ Message::Message() {
     reciverDname = "";
 }
 
-Message::Message(int senderId, int reciverId, string message, string senderDisplayName, string reciverDisplayName) {
+Message::Message(int senderId , int reciverId , string message , string senderDisplayName , string reciverDisplayName){
     this->senderId = senderId;
     this->reciverId = reciverId;
     this->message = message;
@@ -18,7 +18,7 @@ Message::Message(int senderId, int reciverId, string message, string senderDispl
     timestamp = time(nullptr);
 }
 
-Message::Message(json j) {
+Message::Message(json j){
     this->senderId = j.at("senderId");
     this->reciverId = j.at("reciverId");
     this->message = j.at("message");
@@ -41,14 +41,14 @@ time_t Message::getTime() {
     return this->timestamp;
 }
 
-json Message::toJson() {
+json Message::toJson(){
     json j;
     j["senderId"] = this->senderId;
     j["reciverId"] = this->reciverId;
     j["message"] = this->message;
     j["timestamp"] = this->timestamp;
     j["senderDisplayName"] = senderDname;
-    j["reciverDisplayName"] = reciverDname;
+    j["reciverDisplayName"] = reciverDname; 
     return j;
 }
 

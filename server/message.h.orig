@@ -1,22 +1,28 @@
 #include <ctime>
 #include <string>
+#include "json.hpp"
 
 using namespace std;
+using json = nlohmann::json;
 
 class Message{
     public:
-    //TODO: add a json constructor and a to json?????
     Message();
-    Message(int senderId, int reciverId, string content);
+    Message(int, int, string , string , string);
     // so we can load from the db without updating the timestamp
-    Message(int senderId, int reciverId, string content, time_t time);
+    Message(json);
     int getSenderId();
     int getReciverId();
+    string getSenderDisplayName();
+    string getReciverDisplayName();
     string getMessage();
     time_t getTime();
+    json toJson();
     private:
     int senderId;
     int reciverId;
-    string content;
-    time_t time;
+    string senderDname;
+    string reciverDname;
+    string message;
+    time_t timestamp;
 };

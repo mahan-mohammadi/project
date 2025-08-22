@@ -1,7 +1,7 @@
 #include "messagedb.h"
 #include <fstream>
 
-string MessageDB::getFileName(int userId1, int userId2) {
+string MessageDB::getFileName(int userId1 , int userId2){
     int smallerId;
     int largerId;
 
@@ -17,12 +17,12 @@ string MessageDB::getFileName(int userId1, int userId2) {
 
 }
 
-void MessageDB::saveMessage(Message message) {
+void MessageDB::saveMessage(Message message){
     string filename = getFileName(message.getSenderId(), message.getReciverId());
     json chatJson;
     ifstream inputFile(filename);
     if (inputFile.good()) {
-
+        
         inputFile >> chatJson;
     }
 
@@ -36,14 +36,14 @@ void MessageDB::saveMessage(Message message) {
     chatJson.push_back(message.toJson());
 
     ofstream outputFile(filename);
-
+    
     outputFile << chatJson.dump(2);
     outputFile.close();
 }
 
 // returns the number of the message
-json MessageDB::getMessagesOf(int userID, int contactID) {
-    string filename = getFileName(userID, contactID);
+json MessageDB::getMessagesOf(int userID , int contactID){
+    string filename = getFileName(userID , contactID);
     ifstream inputFile(filename);
 
     if (!inputFile.good()) {
