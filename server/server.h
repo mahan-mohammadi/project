@@ -35,4 +35,5 @@ private:
     void handleSend(int, stringstream&);
     void handleHistory(int, stringstream&);
     void handleContacts(int, stringstream&);
+    void handleStats(int , stringstream&);
 };
