@@ -20,7 +20,6 @@ private:
     void viewContactsMenu();
     void sendMessageMenu();
     void viewMessagesWithContact(string);
-
-    //void getStats();
+    void getStats();
     string username;
 };

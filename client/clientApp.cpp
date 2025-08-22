@@ -294,3 +294,30 @@ void App::viewMessagesWithContact(string contactUsername) {
     cin.ignore();
     cin.get();
 }
+
+void App::getStats(){
+    system("clear");
+    cout << "┌──────────────────────────┐\n";
+    cout << "│        Your Stats        │\n";
+    cout << "└──────────────────────────┘\n\n";
+
+    string command = "STATS";
+    client.sendMessage(command);
+    string response = client.receiveMessage();
+
+    if (response.find("ERROR", 0) == 0) {
+        cout << "Could not retrieve stats. Server response: " << response << endl;
+    } else {
+        stringstream ss(response);
+
+        int messageNum , contactNum;
+        ss >> messageNum >> contactNum;
+        
+        cout << "Your stats:\n";
+        cout << "  - Contacts: " << contactNum << endl;
+        cout << "  - Messages: " << messageNum << endl;
+    }
+    cout << "\nPress enter to continue...";
+    cin.ignore();
+    cin.get();
+}
