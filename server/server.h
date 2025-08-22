@@ -4,6 +4,7 @@
 #include <functional>
 #include "contact.h"
 #include "contactsdb.h"
+#include "statsdb.h"
 
 using namespace std;
 using CommandHandler = function<void(int, stringstream&)>;
@@ -25,6 +26,7 @@ private:
     map<string, CommandHandler> commandMap;
     UserDB userdb;
     ContactsDB contactsdb;
+    StatsDB statsdb;
     int port;
     int listener_fd;
     fd_set master_fds;
