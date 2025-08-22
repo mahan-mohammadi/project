@@ -37,6 +37,7 @@ Server::Server(int port) {
 
     std::cout << "Server setup complete. Listening on port " << this->port << std::endl;
     userdb.load();
+    statsdb.load();
 
     setUpCommandMap();
 }
@@ -154,6 +155,7 @@ void Server::handleRegister(int client_fd, stringstream &ss) {
         int id = userdb.getNewID();
         User newUser(id, username, display, encpassword);
         userdb.add(newUser);
+        statsdb.addUserCountByOne();
         send(client_fd, "SUCC", 5, 0);
     }
 }
@@ -216,6 +218,7 @@ void Server::handleSend(int client_fd, stringstream& ss) {
     string reciverDisplayName = recipient->getDName();
 
     MessageDB::saveMessage(Message(senderId, recipient->getID(), message, senderDisplayName, reciverDisplayName ));
+    statsdb.addMessageCountByOne();
 
     cout << "a message was sent between " << senderId << " and " << recipient->getID() << endl;
     send(client_fd, "SUCC\n", 5, 0);
@@ -270,4 +273,22 @@ void Server::handleContacts(int client_fd, stringstream& ss) {
     } else {
         send(client_fd, "[]", 2, 0);
     }
+}
+
+
+void Server::handleStats(int client_fd , stringstream& ss){
+    int userId = clients[client_fd].id;
+    json userContacts = contactsdb.getContactsJson(userId);
+    int numContacts = userContacts.size();
+    int numMessages = 0;
+
+    for (json contact : userContacts) {
+        int contactId = contact.at("id").get<int>();
+        json messages = MessageDB::getMessagesOf(userId, contactId);
+        numMessages += messages.size();
+    }
+
+    stringstream response;
+    response << numMessages << " " << numContacts;
+    send(client_fd, response.str().c_str(), response.str().length(), 0);
 }
