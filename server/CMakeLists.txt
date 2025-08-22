@@ -7,6 +7,7 @@ add_executable(server
     message.cpp
     messagedb.cpp
     contact.cpp
+    statsdb.cpp
     contactsdb.cpp
 )
 
