@@ -137,6 +137,9 @@ void Server::setUpCommandMap() {
     commandMap["CONTACTS"] = [this](int client_fd, stringstream &ss) {
         this->handleContacts(client_fd, ss);
     };
+    commandMap["STATS"] = [this](int client_fd, stringstream &ss) {
+        this->handleStats(client_fd, ss);
+    };
 }
 
 void Server::handleRegister(int client_fd, stringstream &ss) {
