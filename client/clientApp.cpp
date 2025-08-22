@@ -150,7 +150,7 @@ void App::mainAppMenu() {
             sendMessageMenu();
             break;
         case 3:
-            //getStats();
+            getStats();
             break;
         case 4:
             primaryMenu();
