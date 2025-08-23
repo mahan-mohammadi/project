@@ -36,7 +36,7 @@
   - Number of users
   - Messages sent
   - Files transferred
-- [ ] Implement `GET_REPORT` command for clients to request stats and add dynamic memory allocation
+- [x] Implement `GET_REPORT` command for clients to request stats and add dynamic memory allocation
 
 
 ---
@@ -45,7 +45,7 @@
 ## 🎨 Future Goals (Bonus)
 
 
-- [ ] Build a **Graphical User Interface (GUI)** for the client app (Qt/GTK/ncurses/etc.)
+- [x] Build a **Graphical User Interface (GUI)** for the client app check the fltk branch
 
 
 
