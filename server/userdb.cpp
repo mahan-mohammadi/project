@@ -59,7 +59,8 @@ void UserDB::printUserData(int id) {
 
 
 int UserDB::getNewID() {
-
+    if(userCount ==0)
+        return 1;
     return userList[userCount-1].getID()+1;
 }
 
