@@ -1,323 +1,281 @@
 #include "clientApp.h"
-#include <iostream>
 #include "userutils.h"
 #include "enc.h"
 #include "json.hpp"
+#include <iostream>
 #include <ctime>
+#include <sstream>
+
 
 using json = nlohmann::json;
-using namespace std;
 
-App::App(): client(IP, PORT) {
-//empty
-}
-
-void App::drawPrimaryMenu() {
-    system("clear");
-    cout << "  ┌──────────────────────────────────────────┐\n";
-    cout << "  │                                          │\n";
-    cout << "  │       Welcome to Your Messanger CLI      │\n";
-    cout << "  │                                          │\n";
-    cout << "  ├──────────────────────────────────────────┤\n";
-    cout << "  │                                          │\n";
-    cout << "  │           ┌────────────────────┐         │\n";
-    cout << "  │           │      1.Login       │         │\n";
-    cout << "  │           └────────────────────┘         │\n";
-    cout << "  │           ┌────────────────────┐         │\n";
-    cout << "  │           │      2.Register    │         │\n";
-    cout << "  │           └────────────────────┘         │\n";
-    cout << "  │                                          │\n";
-    cout << "  │                                          │\n";
-    cout << "  └──────────────────────────────────────────┘\n";
-}
-
-
-void App::primaryMenu() {
-    bool running = false;
-    while (!running) {
-        drawPrimaryMenu();
-        int choice;
-        cout << "Enter your choice (1, 2, or 3 for exit): ";
-        cin >> choice;
-        switch (choice) {
-        case 1:
-            loginMenu();
-            break;
-        case 2:
-            registerMenu();
-            break;
-        case 3:
-            exit(0);
-            break;
-        default:
-            cout << "Invalid choice. Please try again." << endl;
-        }
-    }
+App::App() : client(IP, PORT) {
+    win = nullptr;
 }
 
 void App::run() {
     if (!client.connectToServer()) {
-        cerr << "Failed to connect to the server." << endl;
+        std::cerr << "Failed to connect to the server." << std::endl;
+        return;
+    }
+    show_primary_menu();
+    Fl::run();
+    client.disconnectFromServer();
+    std::cout << "Disconnected from the server." << std::endl;
+}
+
+void App::show_primary_menu() {
+    if (win) delete win;
+    win = new Fl_Window(400, 300, "Messenger CLI");
+
+    new Fl_Box(100, 40, 200, 40, "Welcome to Your Messenger");
+
+    login_button = new Fl_Button(150, 100, 100, 30, "Login");
+    login_button->callback([](Fl_Widget* w, void* data){
+        ((App*)data)->show_login_menu();
+    }, this);
+
+    register_button = new Fl_Button(150, 150, 100, 30, "Register");
+    register_button->callback([](Fl_Widget* w, void* data){
+        ((App*)data)->show_register_menu();
+    }, this);
+
+    win->resizable(win);
+
+    win->end();
+    win->show();
+}
+
+void App::show_login_menu() {
+    if (win) delete win;
+    win = new Fl_Window(400, 300, "Login");
+
+    username_input = new Fl_Input(150, 50, 200, 30, "Username:");
+    password_input = new Fl_Input(150, 100, 200, 30, "Password:");
+    password_input->type(FL_SECRET_INPUT);
+
+    login_button = new Fl_Button(150, 150, 100, 30, "Login");
+    login_button->callback(login_cb, this);
+    
+    status_box = new Fl_Box(50, 200, 300, 25, "");
+
+
+    win->end();
+    win->show();
+}
+
+void App::login_cb(Fl_Widget*, void* data) {
+    ((App*)data)->login();
+}
+
+void App::login() {
+    std::string user = username_input->value();
+    std::string pass = password_input->value();
+
+    Encryption enc(pass);
+    std::string command = "LOGIN " + user + " " + enc.getEncText();
+
+    client.sendMessage(command);
+    std::string response = client.receiveMessage();
+
+    if (response.find("SUCC", 0) == 0) {
+        this->username = user;
+        show_main_app_menu();
+    } else {
+        status_box->label("Login failed. Check your credentials.");
+        win->redraw();
+    }
+}
+
+void App::show_register_menu() {
+    if (win) delete win;
+    win = new Fl_Window(400, 400, "Register");
+
+    username_input = new Fl_Input(150, 50, 200, 30, "Username:");
+    display_name_input = new Fl_Input(150, 100, 200, 30, "Display Name:");
+    password_input = new Fl_Input(150, 150, 200, 30, "Password:");
+    password_input->type(FL_SECRET_INPUT);
+
+    register_button = new Fl_Button(150, 200, 100, 30, "Register");
+    register_button->callback(register_cb, this);
+
+    status_box = new Fl_Box(50, 250, 300, 25, "");
+
+    win->end();
+    win->show();
+}
+
+void App::register_cb(Fl_Widget*, void* data) {
+    ((App*)data)->register_user();
+}
+
+void App::register_user() {
+    std::string user = username_input->value();
+    std::string display_name = display_name_input->value();
+    std::string pass = password_input->value();
+
+    if (!UserUtils::isUsernameValid(user)) {
+        status_box->label("Invalid username (4-15 chars).");
+        win->redraw();
+        return;
+    }
+    if (!UserUtils::isPassValid(pass)) {
+        status_box->label("Invalid password (8-20 chars, letters & numbers).");
+        win->redraw();
         return;
     }
 
-    primaryMenu();
-
-    client.disconnectFromServer();
-    cout << "Disconnected from the server." << endl;
-}
-
-void App::registerMenu() {
-    system("clear");
-    string username, displayName, password;
-    cout << "-------- Register --------\n";
-
-    do {
-        cout << "Enter username (4-15 chars): ";
-        cin >> username;
-    } while (!UserUtils::isUsernameValid(username));
-
-    cout << "Enter display name: ";
-    cin >> displayName;
-
-    do {
-        cout << "Enter password (8-20 chars,letters and numbers only): ";
-        cin >> password;
-    } while (!UserUtils::isPassValid(password));
-
-    Encryption enc(password);
-    string command = "REGISTER " + username + " " + displayName + " " + enc.getEncText();
+    Encryption enc(pass);
+    std::string command = "REGISTER " + user + " " + display_name + " " + enc.getEncText();
 
     client.sendMessage(command);
-    string response = client.receiveMessage();
-    // checks if "SUCC" is found starting at position 0.
-    if (response.find("SUCC", 0) == 0) {
-        cout << "Registration successful! You can now log in." << endl;
-    } else {
-        cout << "Registration failed. Server response: " << response << endl;
-    }
-
-    cout << "Press enter to continue...";
-    int garbage;
-    cin >>garbage;
-
-}
-
-void App::loginMenu() {
-    system("clear");
-    string username, password;
-
-    cout << "Enter username: ";
-    cin >> username;
-
-    cout << "Enter password: ";
-    cin >> password;
-
-    Encryption enc(password);
-    string command = "LOGIN " + username + " " + enc.getEncText();
-
-    client.sendMessage(command);
-    string response = client.receiveMessage();
+    std::string response = client.receiveMessage();
 
     if (response.find("SUCC", 0) == 0) {
-        cout << "\nLogin successful!" << endl;
-        this->username = username;
-        mainAppMenu();
+        show_login_menu();
     } else {
-        cout << "\nLogin failed. Server response: " << response << endl;
-    }
-
-    cout << "Press 0 to continue...";
-    int garbage;
-    cin >>garbage;
-}
-
-void App::mainAppMenu() {
-    system("clear");
-
-    bool valid = false;
-    while(!valid) {
-        int choice;
-        drawMainMenu();
-        cout << "Enter your choice (1, 2, 3 , 4 ): ";
-        cin >> choice;
-        switch (choice)
-        {
-        case 1:
-            viewContactsMenu();
-            break;
-        case 2:
-            sendMessageMenu();
-            break;
-        case 3:
-            getStats();
-            break;
-        case 4:
-            primaryMenu();
-            break;
-        default:
-            cout << "Invalid choice. Please try again." << endl;
-            break;
-        }
+        status_box->label("Registration failed. Try a different username.");
+        win->redraw();
     }
 }
 
-void App::drawMainMenu() {
-    system("clear");
-    cout << "   logged in as " << this->username << '\n';
-    cout << "  ┌──────────────────────────────────────────┐\n";
-    cout << "  │                                          │\n";
-    cout << "  ├──────────────────────────────────────────┤\n";
-    cout << "  │                                          │\n";
-    cout << "  │      1. View All Contacts                │\n";
-    cout << "  │      2. Send Message                     │\n";
-    cout << "  │      3. Get Stats                        │\n";
-    cout << "  │      4. Exit                             │\n";
-    cout << "  │                                          │\n";
-    cout << "  └──────────────────────────────────────────┘\n";
+void App::show_main_app_menu() {
+    if (win) delete win;
+    win = new Fl_Window(400, 400, "Main Menu");
+
+    std::string welcome_message = "Logged in as " + this->username;
+    new Fl_Box(100, 20, 200, 20, welcome_message.c_str());
+
+    contacts_button = new Fl_Button(100, 80, 200, 40, "View Contacts");
+    contacts_button->callback(view_contacts_cb, this);
+
+    send_button = new Fl_Button(100, 140, 200, 40, "Send Message");
+    send_button->callback(send_message_cb, this);
+
+    stats_button = new Fl_Button(100, 200, 200, 40, "Get Stats");
+    stats_button->callback(view_stats_cb, this);
+
+    exit_button = new Fl_Button(150, 260, 100, 30, "Logout");
+    exit_button->callback([](Fl_Widget* w, void* data){
+        ((App*)data)->show_primary_menu();
+    }, this);
+
+    win->end();
+    win->show();
 }
 
-void App::sendMessageMenu() {
-    system("clear");
-    string recipient, message;
+void App::view_contacts_cb(Fl_Widget*, void* data) {
+    ((App*)data)->view_contacts();
+}
 
-    cout << "Enter recipient's username: ";
-    cin >> recipient;
+void App::view_contacts() {
+    if(win) delete win;
+    win = new Fl_Window(500, 400, "Contacts");
 
-    cout << "Enter your message: ";
-    cin.ignore(); //clean the \n
-    getline(cin, message);
+    contacts_display = new Fl_Text_Display(20, 20, 460, 300, "Your Contacts");
+    contacts_buffer = new Fl_Text_Buffer();
+    contacts_display->buffer(contacts_buffer);
+    
+    Fl_Button* back_button = new Fl_Button(200, 340, 100, 30, "Back");
+    back_button->callback(back_to_main_cb, this);
 
-    string command = "SEND " + recipient + " " + message;
-
+    std::string command = "CONTACTS";
     client.sendMessage(command);
-    string response = client.receiveMessage();
-
-    if (response.find("SUCC", 0) == 0) {
-        cout << "\nMessage sent successfully!" << endl;
-    } else {
-        cout << "\nFailed to send message. Server response: " << response << endl;
-    }
-
-    cout << "Press enter to continue...";
-    cin.get();
-}
-
-
-void App::viewContactsMenu() {
-    system("clear");
-    cout << "┌──────────────────────────┐\n";
-    cout << "│      Your Contacts       │\n";
-    cout << "└──────────────────────────┘\n\n";
-
-    string command = "CONTACTS";
-    client.sendMessage(command);
-    string response = client.receiveMessage();
+    std::string response = client.receiveMessage();
 
     if (response.rfind("ERROR", 0) == 0) {
-        cout << "Could not retrieve contacts. Server response: " << response << endl;
+        contacts_buffer->text("Could not retrieve contacts.");
     } else if (response.empty()) {
-        cout << "You don't have any contacts yet. Send a message to add one!\n";
+        contacts_buffer->text("You don't have any contacts yet.");
     } else {
         json contactslist = json::parse(response);
-
-        if (contactslist.empty()) {
-            cout << "You don't have any contacts yet. Send a message to add one!\n";
-        } else {
-            int count = 1;
-            cout << "------------------------------------------\n";
-            for (json contact : contactslist) {
-                string displayName = contact.at("displayName").get<string>();
-                string username = contact.at("username").get<string>();
-                cout << "  " << count << ". " << displayName << " (@" << username << ")\n";
-                count++;
-            }
-            cout << "------------------------------------------\n";
-            cout << "Enter a contact number to view messages, or 0 to go back: ";
-            int choice;
-            cin >> choice;
-
-            if ( choice < 0 || choice > count) {
-                cout << "\nInvalid choice. Returning to the main menu." << endl;
-            }
-            else {
-                int index = 1;
-                for (json contact : contactslist) {
-                    if(index == choice) {
-                        string contactUsername = contact.at("username").get<string>();
-                        viewMessagesWithContact(contactUsername);
-                        return;
-                    }
-                    index++;
-                }
-            }
+        std::stringstream ss;
+        for (const auto& contact : contactslist) {
+            ss << contact["displayName"].get<std::string>() << " (@" << contact["username"].get<std::string>() << ")\n";
         }
-
-        cout << "Press enter to continue...";
-        cin.ignore(); //the enter from the previous menu still causes problem here
-        cin.get();
+        contacts_buffer->text(ss.str().c_str());
     }
+
+    win->end();
+    win->show();
 }
 
-void App::viewMessagesWithContact(string contactUsername) {
-    system("clear");
-    cout << "┌──────────────────────────────────────────┐\n";
-    cout << "│        Messages with contact             │ \n";
-    cout << "└──────────────────────────────────────────┘\n\n";
+void App::send_message_cb(Fl_Widget*, void* data) {
+    ((App*)data)->show_send_message_menu();
+}
 
-    string command = "HISTORY " + contactUsername;
+void App::show_send_message_menu() {
+    if (win) delete win;
+    win = new Fl_Window(400, 300, "Send Message");
+
+    recipient_input = new Fl_Input(150, 50, 200, 30, "Recipient:");
+    message_input = new Fl_Input(150, 100, 200, 100, "Message:");
+    
+    send_button = new Fl_Button(150, 220, 100, 30, "Send");
+    send_button->callback([](Fl_Widget* w, void* data){
+        ((App*)data)->send_message();
+    }, this);
+
+    Fl_Button* back_button = new Fl_Button(260, 220, 100, 30, "Back");
+    back_button->callback(back_to_main_cb, this);
+
+    status_box = new Fl_Box(50, 260, 300, 25, "");
+
+
+    win->end();
+    win->show();
+}
+
+void App::send_message() {
+    std::string recipient = recipient_input->value();
+    std::string message = message_input->value();
+
+    std::string command = "SEND " + recipient + " " + message;
     client.sendMessage(command);
-    string response = client.receiveMessage();
+    std::string response = client.receiveMessage();
 
-    if (response.rfind("ERROR", 0) == 0) {
-        cout << "Could not retrieve messages. Server response: " << response << endl;
+    if (response.find("SUCC", 0) == 0) {
+        status_box->label("Message sent successfully!");
     } else {
-        json messages = json::parse(response);
-        if (messages.empty()) {
-            cout << "No messages with this user yet. Be the first to say hi!" << endl;
-        } else {
-            for(json message : messages) {
-                cout << "-----------------------------------" << endl;
-                string content = message.at("message").get<string>();
-                string sender = message.at("senderDisplayName").get<string>();
-                string reciver = message.at("reciverDisplayName").get<string>();
-                time_t timestamp = message.at("timestamp").get<time_t>();
-                string timestr = UserUtils::formatTimestamp(timestamp);
-                cout << "from: "<< sender << endl;
-                cout << content << endl;
-                cout << "time: " <<timestr << endl;
-                cout << "-----------------------------------\n" << endl;
-            }
-        }
+        status_box->label("Failed to send message.");
     }
-    cout << "Press enter to continue...";
-    cin.ignore();
-    cin.get();
+    win->redraw();
 }
 
-void App::getStats(){
-    system("clear");
-    cout << "┌──────────────────────────┐\n";
-    cout << "│        Your Stats        │\n";
-    cout << "└──────────────────────────┘\n\n";
+void App::view_stats_cb(Fl_Widget*, void* data) {
+    ((App*)data)->get_stats();
+}
 
-    string command = "STATS";
+void App::get_stats() {
+    if(win) delete win;
+    win = new Fl_Window(400, 200, "Your Stats");
+    
+    Fl_Text_Buffer* stats_buffer = new Fl_Text_Buffer();
+    Fl_Text_Display* stats_display = new Fl_Text_Display(20, 20, 360, 100, "Stats");
+    stats_display->buffer(stats_buffer);
+    
+    Fl_Button* back_button = new Fl_Button(150, 140, 100, 30, "Back");
+    back_button->callback(back_to_main_cb, this);
+
+    std::string command = "STATS";
     client.sendMessage(command);
-    string response = client.receiveMessage();
+    std::string response = client.receiveMessage();
 
     if (response.find("ERROR", 0) == 0) {
-        cout << "Could not retrieve stats. Server response: " << response << endl;
+        stats_buffer->text("Could not retrieve stats.");
     } else {
-        stringstream ss(response);
-
-        int messageNum , contactNum;
+        std::stringstream ss(response);
+        int messageNum, contactNum;
         ss >> messageNum >> contactNum;
         
-        cout << "Your stats:\n";
-        cout << "  - Contacts: " << contactNum << endl;
-        cout << "  - Messages: " << messageNum << endl;
+        std::string stats_text = "Contacts: " + std::to_string(contactNum) + "\nMessages: " + std::to_string(messageNum);
+        stats_buffer->text(stats_text.c_str());
     }
-    cout << "\nPress enter to continue...";
-    cin.ignore();
-    cin.get();
+
+    win->end();
+    win->show();
+}
+
+void App::back_to_main_cb(Fl_Widget*, void* data) {
+    ((App*)data)->show_main_app_menu();
 }

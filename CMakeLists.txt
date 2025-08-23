@@ -1,18 +1,13 @@
-
-# Sets the minimum required version of CMake.
 cmake_minimum_required(VERSION 3.10)
+project(MessengerProject)
 
-# Sets the project name.
-project(MessagingApp)
-
-# Sets the C++ standard to C++17. This is based on your VS Code settings.
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add the common directory to the include path for all targets.
-include_directories(common)
+# Find FLTK
+find_package(FLTK REQUIRED)
+include_directories(${FLTK_INCLUDE_DIRS})
 
-# Add the subdirectories that contain their own CMakeLists.txt files.
+# Add subdirectories for client, server, and common libraries
 add_subdirectory(common)
-add_subdirectory(server)
 add_subdirectory(client)
+add_subdirectory(server)
