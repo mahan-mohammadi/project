@@ -1,4 +1,41 @@
+# 🧩 Project Phases & TODOs
+## ✅ Phase 1: Core User Management
+### 👤 User Class
+- [x] Define the data structure for a single user (`user.h`)
+- [x] Implement the methods in `user.cpp`
+- [x] ♻️ Reformat constructors to use **member initializer lists** for better C++ practices
 
+### 📋 UserManager Class
+- [x] make a way so that you can get a new id for new users
+- [x] Implement `UserManager.h` with method declarations (`registerUser`, `userExists`)
+- [x] Implement `UserManager.cpp` with file I/O logic to read/write `users.txt`
+
+### 🔐 Custom Encryption
+- [x] Create `Encryptor` class (`Encryptor.h`, `Encryptor.cpp`)
+- [x] Add encryption/decryption methods (e.g., simple XOR cipher)
+- ~~[ ] Integrate `Encryptor` into `UserManager` to encrypt passwords before saving~~
+- ~~[ ] Add them to the user class~~
+
+### 🌐 Integrate into Server
+- [x] Add a `UserManager` member to the `Server` class
+- [x] Implement `REGISTER` command in `Server::run()` using `userManager.registerUser()`
+
+---
+
+## 🖥️ Phase 2: Client Application & Login
+### 🧑‍💻 Client Class
+- [x] Implement `client.h` and `client.cpp`
+- [x] Write logic to connect to the server
+- [ ] ~~Use a **two-threaded model**:~~
+  - ~~Thread 1: Send user input~~
+  - ~~Thread 2: Receive server messages~~
+
+### 🔑 LOGIN Command
+- [x] Add login logic to `UserManager` (verify username and password)
+- [x] Add `LOGIN` command to server using `UserManager`
+- [x] Use `std::map<int, UserInfo> clients` in `Server` to track logged-in users
+
+---
 
 ## 💬 Phase 3: Private Messaging & File Storage
 ### 📩 SEND Command
@@ -38,13 +75,9 @@
   - Files transferred
 - [x] Implement `GET_REPORT` command for clients to request stats and add dynamic memory allocation
 
-
 ---
 
-
 ## 🎨 Future Goals (Bonus)
-
-
 - [x] Build a **Graphical User Interface (GUI)** for the client app check the fltk branch
 
 
