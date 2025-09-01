@@ -121,6 +121,10 @@ int Server::getPort() {
 
 void Server::setUpCommandMap() {
     // the right of the = is the way to do a lambda function in cpp
+
+    /*
+    the first this gives access to methods of the server class the second this is just a pointer
+    */
     commandMap["REGISTER"] = [this](int client_fd, stringstream &ss) {
         this->handleRegister(client_fd, ss);
     };
