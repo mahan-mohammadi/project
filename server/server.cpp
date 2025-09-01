@@ -156,6 +156,7 @@ void Server::handleRegister(int client_fd, stringstream &ss) {
         User newUser(id, username, display, encpassword);
         userdb.add(newUser);
         statsdb.addUserCountByOne();
+        cout << "Total users: " << statsdb.getUserCount() << endl;
         send(client_fd, "SUCC", 5, 0);
     }
 }
@@ -220,7 +221,9 @@ void Server::handleSend(int client_fd, stringstream& ss) {
     MessageDB::saveMessage(Message(senderId, recipient->getID(), message, senderDisplayName, reciverDisplayName ));
     statsdb.addMessageCountByOne();
 
+
     cout << "a message was sent between " << senderId << " and " << recipient->getID() << endl;
+    cout << "Total messages: " << statsdb.getMessageCount() << endl;
     send(client_fd, "SUCC\n", 5, 0);
 }
 
