@@ -71,11 +71,18 @@ string Client::receiveMessage() {
         return "";
     }
 
-    char buffer[4096] = {0}; // Buffer for incoming data had to use c string
+    char buffer[4096] = {0}; // 4kb of Buffer for incoming data had to use c string
 
 
     int bytesReceived = recv(client_fd, buffer, sizeof(buffer), 0);
 
+
+    /*Data received: The number is positive.
+
+    Connection closed: The number is zero.
+
+    An error occurred: The number is negative.*/
+    
     if (bytesReceived > 0) {
         // Successfully received data
         return string(buffer, bytesReceived);
