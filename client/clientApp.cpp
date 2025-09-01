@@ -57,7 +57,7 @@ void App::primaryMenu() {
 
 void App::run() {
     if (!client.connectToServer()) {
-        cerr << "Failed to connect to the server." << endl;
+        cout << "Failed to connect to the server." << endl;
         return;
     }
 
@@ -90,14 +90,14 @@ void App::registerMenu() {
 
     client.sendMessage(command);
     string response = client.receiveMessage();
-    // checks if "SUCC" is found starting at position 0.
+    // checks if "SUCC" is found starting at position 0. the first zero is the starting point of search the return result is the index
     if (response.find("SUCC", 0) == 0) {
         cout << "Registration successful! You can now log in." << endl;
     } else {
         cout << "Registration failed. Server response: " << response << endl;
     }
 
-    cout << "Press enter to continue...";
+    cout << "enter zero to continue...";
     int garbage;
     cin >>garbage;
 
@@ -214,7 +214,7 @@ void App::viewContactsMenu() {
     client.sendMessage(command);
     string response = client.receiveMessage();
 
-    if (response.rfind("ERROR", 0) == 0) {
+    if (response.find("ERROR", 0) == 0) {
         cout << "Could not retrieve contacts. Server response: " << response << endl;
     } else if (response.empty()) {
         cout << "You don't have any contacts yet. Send a message to add one!\n";
@@ -262,14 +262,14 @@ void App::viewContactsMenu() {
 void App::viewMessagesWithContact(string contactUsername) {
     system("clear");
     cout << "┌──────────────────────────────────────────┐\n";
-    cout << "│        Messages with contact             │ \n";
+    cout << "│        Messages with contacts            │ \n";
     cout << "└──────────────────────────────────────────┘\n\n";
 
     string command = "HISTORY " + contactUsername;
     client.sendMessage(command);
     string response = client.receiveMessage();
 
-    if (response.rfind("ERROR", 0) == 0) {
+    if (response.find("ERROR", 0) == 0) {
         cout << "Could not retrieve messages. Server response: " << response << endl;
     } else {
         json messages = json::parse(response);
