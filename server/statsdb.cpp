@@ -23,12 +23,12 @@ void StatsDB::save() {
 }
 
 void StatsDB::addMessageCountByOne() {
-    stats["totalUsers"] = stats.at("totalUsers").get<int>() + 1;
+    stats["totalMessages"] = stats.at("totalMessages").get<int>() + 1;
     save();
 }
 
 void StatsDB::addUserCountByOne() {
-    stats["totalMessages"] = stats.at("totalMessages").get<int>() + 1;
+    stats["totalUsers"] = stats.at("totalUsers").get<int>() + 1;
     save();
 }
 
