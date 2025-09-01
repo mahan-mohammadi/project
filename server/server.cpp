@@ -13,7 +13,6 @@ Server::Server(int port) {
     // --- Create the socket ---
     this->listener_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (this->listener_fd == -1) {
-        perror("socket");
         return;
     }
 
@@ -25,13 +24,11 @@ Server::Server(int port) {
 
     // --- Bind the socket ---
     if (bind(this->listener_fd, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
-        perror("bind");
         return;
     }
 
     // --- Listen on the socket ---
     if (listen(this->listener_fd, 5) == -1) {
-        perror("listen");
         return;
     }
 
@@ -52,9 +49,9 @@ Server::~Server() {
 
 
 void Server::run() {
-    // Clean and set up the master file descriptor set
-    FD_ZERO(&this->master_fds);
-    FD_SET(this->listener_fd, &this->master_fds);
+
+    FD_ZERO(&this->master_fds); // clean
+    FD_SET(this->listener_fd, &this->master_fds); //fd_set or master is the list of all fds
 
     // Keep track of the highest file descriptor
     this->fd_max = this->listener_fd;
@@ -66,7 +63,6 @@ void Server::run() {
         fd_set read_fds = this->master_fds;
 
         if (select(this->fd_max + 1, &read_fds, nullptr, nullptr, nullptr) == -1) {
-            perror("select");
             return;
         }
 
@@ -86,7 +82,7 @@ void Server::run() {
                     }
                 } else {
                     // --- Case 2: Data from an existing client ---
-                    char buffer[1024] = { 0 };
+                    char buffer[4096] = { 0 };
                     int bytes_received = recv(i, buffer, sizeof(buffer), 0);
 
                     if (bytes_received <= 0) {
@@ -100,6 +96,7 @@ void Server::run() {
                         string command;
                         ss >> command;
                         auto f = commandMap.find(command);
+                        //if the location of command is before end
                         if(f != commandMap.end()) {
                             //first is the key second is the value
                             f->second(i,ss);
@@ -123,6 +120,7 @@ int Server::getPort() {
 }
 
 void Server::setUpCommandMap() {
+    // the right of the = is the way to do a lambda function in cpp
     commandMap["REGISTER"] = [this](int client_fd, stringstream &ss) {
         this->handleRegister(client_fd, ss);
     };
