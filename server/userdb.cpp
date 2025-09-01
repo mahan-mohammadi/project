@@ -23,7 +23,7 @@ void UserDB::load() {
                 getline(ss, display, ',') &&
                 getline(ss, encpass)) {
 
-            int id = std::stoi(idStr); // convert string to int
+            int id = stoi(idStr); // convert string to int
             userList[userCount++] = User(id, username, display, encpass);
         }
     }
