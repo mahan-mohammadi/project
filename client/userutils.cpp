@@ -1,5 +1,5 @@
 #include "userutils.h"
-#include <iomanip>
+#include <iomanip> //for time
 #include <sstream>
 bool UserUtils::isPassValid(string password) {
     bool isValidSize = false;
@@ -32,9 +32,12 @@ bool UserUtils::isUsernameValid(string username) {
     return true;
 }
 
+
+//timet is second from 1970 jan 1
 string UserUtils::formatTimestamp(time_t time) {
-    std::tm* ptm = std::localtime(&time);
-    std::stringstream ss;
-    ss << std::put_time(ptm, "%Y-%m-%d %H:%M:%S"); //YYYY-MM-DD HH:MM:SS
-    return ss.str();
+    // "YYYY-MM-DD HH:MM:SS" is 19 characters, plus one for the null terminator.
+    char buffer[20];
+    std::tm* ptm = std::localtime(&time); // turns it into human readable time for the server locale
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ptm);
+    return string(buffer); // turn into a string class
 }
