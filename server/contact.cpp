@@ -11,6 +11,7 @@ Contact::Contact(string username, string displayName) {
 }
 
 Contact::Contact(json j) {
+    // the get_to puts the value at id to well... id but unlike get i dont have specify the type
     j.at("id").get_to(id);
     j.at("username").get_to(username);
     j.at("displayName").get_to(displayName);
