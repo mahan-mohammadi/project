@@ -69,7 +69,7 @@
 
 
 ### 📊 Reporting System
-- [ ] Add static counters in `Server` to track:
+- [x] Add static counters in `Server` to track:
   - Number of users
   - Messages sent
   - Files transferred
