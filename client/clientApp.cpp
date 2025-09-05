@@ -15,7 +15,9 @@ App::App() : client(IP, PORT) {
 
 void App::run() {
     if (!client.connectToServer()) {
-        std::cerr << "Failed to connect to the server." << std::endl;
+
+        cout << "Failed to connect to the server." << endl;
+
         return;
     }
     show_primary_menu();
@@ -27,6 +29,7 @@ void App::run() {
 void App::show_primary_menu() {
     if (win) delete win;
     win = new Fl_Window(400, 300, "Messenger CLI");
+    win->resizable(win);
 
     new Fl_Box(100, 40, 200, 40, "Welcome to Your Messenger");
 
@@ -40,8 +43,6 @@ void App::show_primary_menu() {
         ((App*)data)->show_register_menu();
     }, this);
 
-    win->resizable(win);
-
     win->end();
     win->show();
 }
@@ -49,6 +50,7 @@ void App::show_primary_menu() {
 void App::show_login_menu() {
     if (win) delete win;
     win = new Fl_Window(400, 300, "Login");
+    win->resizable(win);
 
     username_input = new Fl_Input(150, 50, 200, 30, "Username:");
     password_input = new Fl_Input(150, 100, 200, 30, "Password:");
@@ -56,7 +58,7 @@ void App::show_login_menu() {
 
     login_button = new Fl_Button(150, 150, 100, 30, "Login");
     login_button->callback(login_cb, this);
-    
+
     status_box = new Fl_Box(50, 200, 300, 25, "");
 
 
@@ -90,6 +92,7 @@ void App::login() {
 void App::show_register_menu() {
     if (win) delete win;
     win = new Fl_Window(400, 400, "Register");
+    win->resizable(win);
 
     username_input = new Fl_Input(150, 50, 200, 30, "Username:");
     display_name_input = new Fl_Input(150, 100, 200, 30, "Display Name:");
@@ -142,9 +145,10 @@ void App::register_user() {
 void App::show_main_app_menu() {
     if (win) delete win;
     win = new Fl_Window(400, 400, "Main Menu");
+    win->resizable(win);
 
-    std::string welcome_message = "Logged in as " + this->username;
-    new Fl_Box(100, 20, 200, 20, welcome_message.c_str());
+    welcome_message_text = "Logged in as " + this->username;
+    new Fl_Box(100, 20, 200, 20, welcome_message_text.c_str());
 
     contacts_button = new Fl_Button(100, 80, 200, 40, "View Contacts");
     contacts_button->callback(view_contacts_cb, this);
@@ -171,11 +175,12 @@ void App::view_contacts_cb(Fl_Widget*, void* data) {
 void App::view_contacts() {
     if(win) delete win;
     win = new Fl_Window(500, 400, "Contacts");
+    win->resizable(win);
 
-    contacts_display = new Fl_Text_Display(20, 20, 460, 300, "Your Contacts");
-    contacts_buffer = new Fl_Text_Buffer();
-    contacts_display->buffer(contacts_buffer);
-    
+
+    contacts_browser = new Fl_Hold_Browser(20, 20, 460, 300, "Your Contacts");
+    contacts_browser->callback(contact_selected_cb, this);
+    contacts_browser->when(FL_WHEN_CHANGED);
     Fl_Button* back_button = new Fl_Button(200, 340, 100, 30, "Back");
     back_button->callback(back_to_main_cb, this);
 
@@ -183,34 +188,88 @@ void App::view_contacts() {
     client.sendMessage(command);
     std::string response = client.receiveMessage();
 
-    if (response.rfind("ERROR", 0) == 0) {
-        contacts_buffer->text("Could not retrieve contacts.");
-    } else if (response.empty()) {
-        contacts_buffer->text("You don't have any contacts yet.");
+    if (response.find("ERROR", 0) == 0) {
+        cout << "Could not retrieve contacts. Server response: " << response << endl;
+    } else if (response.empty() || response == "[]") {
+        contacts_browser->add("You don't have any contacts yet.");
     } else {
-        json contactslist = json::parse(response);
-        std::stringstream ss;
-        for (const auto& contact : contactslist) {
-            ss << contact["displayName"].get<std::string>() << " (@" << contact["username"].get<std::string>() << ")\n";
+        contacts_list = json::parse(response);
+        for (const auto& contact : contacts_list) {
+            std::string item = contact["displayName"].get<std::string>() + " (@" + contact["username"].get<std::string>() + ")";
+            contacts_browser->add(item.c_str());
         }
-        contacts_buffer->text(ss.str().c_str());
     }
 
     win->end();
     win->show();
 }
 
+void App::contact_selected_cb(Fl_Widget*, void* data) {
+    ((App*)data)->contact_selected();
+}
+
+void App::contact_selected() {
+    int index = contacts_browser->value();
+    if (index > 0 && index <= (int)contacts_list.size()) {
+        std::string contact_username = contacts_list[index - 1]["username"].get<std::string>();
+        show_messages_with_contact(contact_username);
+    }
+}
+
+void App::show_messages_with_contact(const std::string& contact_username) {
+    if (win) delete win;
+    win = new Fl_Window(500, 500, ("Messages with " + contact_username).c_str());
+    win->resizable(win);
+
+    messages_display = new Fl_Text_Display(20, 20, 460, 400);
+    messages_buffer = new Fl_Text_Buffer();
+    messages_display->buffer(messages_buffer);
+
+    Fl_Button* back_button = new Fl_Button(200, 440, 100, 30, "Back");
+    back_button->callback(back_to_main_cb, this);
+
+    std::string command = "HISTORY " + contact_username;
+    client.sendMessage(command);
+    std::string response = client.receiveMessage();
+
+    if (response.find("ERROR", 0) == 0) {
+        messages_buffer->text("Could not retrieve messages.");
+    } else {
+        json messages = json::parse(response);
+        if (messages.empty()) {
+            messages_buffer->text("No messages with this user yet.");
+        } else {
+            std::stringstream ss;
+            for (const auto& message : messages) {
+                ss << "From: " << message["senderDisplayName"].get<std::string>() << "\n";
+                ss << message["message"].get<std::string>() << "\n";
+                time_t timestamp = message.at("timestamp").get<time_t>();
+                ss << "Time: " << UserUtils::formatTimestamp(timestamp) << "\n";
+                ss << "-----------------------------------\n";
+            }
+            messages_buffer->text(ss.str().c_str());
+        }
+    }
+
+    win->end();
+    win->show();
+}
+
+
 void App::send_message_cb(Fl_Widget*, void* data) {
     ((App*)data)->show_send_message_menu();
 }
 
+
 void App::show_send_message_menu() {
     if (win) delete win;
     win = new Fl_Window(400, 300, "Send Message");
+    win->resizable(win);
+
 
     recipient_input = new Fl_Input(150, 50, 200, 30, "Recipient:");
     message_input = new Fl_Input(150, 100, 200, 100, "Message:");
-    
+
     send_button = new Fl_Button(150, 220, 100, 30, "Send");
     send_button->callback([](Fl_Widget* w, void* data){
         ((App*)data)->send_message();
@@ -234,8 +293,10 @@ void App::send_message() {
     client.sendMessage(command);
     std::string response = client.receiveMessage();
 
+
     if (response.find("SUCC", 0) == 0) {
         status_box->label("Message sent successfully!");
+
     } else {
         status_box->label("Failed to send message.");
     }
@@ -249,11 +310,12 @@ void App::view_stats_cb(Fl_Widget*, void* data) {
 void App::get_stats() {
     if(win) delete win;
     win = new Fl_Window(400, 200, "Your Stats");
-    
+    win->resizable(win);
+
     Fl_Text_Buffer* stats_buffer = new Fl_Text_Buffer();
     Fl_Text_Display* stats_display = new Fl_Text_Display(20, 20, 360, 100, "Stats");
     stats_display->buffer(stats_buffer);
-    
+
     Fl_Button* back_button = new Fl_Button(150, 140, 100, 30, "Back");
     back_button->callback(back_to_main_cb, this);
 
@@ -267,7 +329,7 @@ void App::get_stats() {
         std::stringstream ss(response);
         int messageNum, contactNum;
         ss >> messageNum >> contactNum;
-        
+
         std::string stats_text = "Contacts: " + std::to_string(contactNum) + "\nMessages: " + std::to_string(messageNum);
         stats_buffer->text(stats_text.c_str());
     }
