@@ -22,12 +22,12 @@ void StatsDB::save() {
     file << stats.dump(2);
 }
 
-void StatsDB::addMessageCountByOne() {
+void StatsDB::addUserCountByOne() {
     stats["totalUsers"] = stats.at("totalUsers").get<int>() + 1;
     save();
 }
 
-void StatsDB::addUserCountByOne() {
+void StatsDB::addMessageCountByOne() {
     stats["totalMessages"] = stats.at("totalMessages").get<int>() + 1;
     save();
 }
